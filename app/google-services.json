@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1076286701747",
+    "firebase_url": "https://buddy-a4223.firebaseio.com",
+    "project_id": "buddy-a4223",
+    "storage_bucket": "buddy-a4223.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076286701747:android:493f27587255a232",
+        "android_client_info": {
+          "package_name": "com.BUddy.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076286701747-eljiu4v9e7ue6koftp3ov3l6j6ds00st.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdvNcSk-eZrx_3TR2YeLmrKJ_RItClsng"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
