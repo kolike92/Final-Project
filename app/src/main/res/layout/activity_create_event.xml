@@ -70,10 +70,21 @@
             android:layout_alignParentStart="true"
             android:layout_weight="1" />
 
-        <DatePicker
-            android:layout_width="269dp"
-            android:layout_height="62dp"
-            android:id="@+id/dpDate" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/etDate"
+            android:layout_weight="1" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/etTime"
+            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -116,8 +127,8 @@
             android:id="@+id/tvDetails"
             android:textSize="25dp"
             android:layout_marginTop="42dp"
-            android:layout_alignParentStart="true"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_gravity="top" />
 
         <EditText
             android:layout_width="wrap_content"

@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log in through other source:"
-        android:id="@+id/textView2"
+        android:id="@+id/tvLocation"
         android:textSize="20dp" />
 
     <LinearLayout
