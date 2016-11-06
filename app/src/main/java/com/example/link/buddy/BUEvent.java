@@ -10,6 +10,7 @@ public class BUEvent {
     private Date eventDate;
     private String eventTitle;
     private String eventDetails;
+    private  String participantNum;
     private int category;
     private String location;
 
@@ -18,10 +19,11 @@ public class BUEvent {
 
     }
 
-    public BUEvent(Date d, String title, String details, int category, String location)
+    public BUEvent(Date d, String title, String number, String details, int category, String location)
     {
         eventDate = d;
         eventTitle = title;
+        participantNum = number;
         eventDetails = details;
         this.category = category;
         this.location = location;
@@ -57,6 +59,14 @@ public class BUEvent {
 
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
+    }
+
+    public String getParticipantNum() {
+        return participantNum;
+    }
+
+    public void setParticipantNum(String participantNum) {
+        this.participantNum = participantNum;
     }
 
     public String getLocation() {
