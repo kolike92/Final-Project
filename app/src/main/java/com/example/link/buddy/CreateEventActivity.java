@@ -36,7 +36,7 @@ public class CreateEventActivity extends AppCompatActivity
         implements TimePickerFragment.OnTimeSelectedListener, DatePickerFragment.OnDateSelectedListener{
 
     Button btnCreate, btnCancel;
-    EditText etTitle, etLocation, etDetails, etDate, etTime;
+    EditText etTitle, etLocation, etDetails, etDate, etTime,etNumber;
     Spinner spnCategories;
     DatePickerFragment dpdDate;
     TimePickerFragment tpdTime;
@@ -58,6 +58,7 @@ public class CreateEventActivity extends AppCompatActivity
         etDetails = (EditText) findViewById(R.id.etDetails);
         etDate = (EditText) findViewById(R.id.etDate);
         etTime = (EditText) findViewById(R.id.etTime);
+        etNumber = (EditText) findViewById(R.id.etNumber);
         spnCategories = (Spinner) findViewById(R.id.spnCategories);
         sdf = new SimpleDateFormat("MM-dd-yyyy");
         stf = new SimpleDateFormat("HH:mm");
@@ -91,6 +92,7 @@ public class CreateEventActivity extends AppCompatActivity
             public void onClick(View v) {
                 String title = etTitle.getText().toString();
                 String location = etLocation.getText().toString();
+                String number = etNumber.getText().toString();
                 //fake date
                 int day = 1;//dpDate.getDayOfMonth();
                 int month = 1;//dpDate.getMonth();
@@ -121,7 +123,7 @@ public class CreateEventActivity extends AppCompatActivity
 
                 Date d = c.getTime();
                 EventCategory category = (EventCategory) spnCategories.getSelectedItem();
-                BUEvent e = new BUEvent(d, title, details, category.getId(), location);
+                BUEvent e = new BUEvent(d, title, number, details, category.getId(), location);
                 DatabaseReference eventRef = myRef.push();
                 eventRef.setValue(e);
             }
