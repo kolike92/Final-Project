@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
+    //test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
