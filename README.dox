@@ -1,0 +1,256 @@
+# final-project
+Use Cases for
+
+BUddy
+
+
+Prepared by Becca, Qi, Claudia, Link
+
+Group NOGE
+
+Version 1.0 10/10/2016
+
+Version 1.1 10/15/2016
+
+Version 1.2 10/20/2016
+
+Version 1.3 10/24/2016
+1.	Guidance for Use Case Template
+Document each use case using the template shown in the Appendix. This section provides a description of each section in the use case template.
+2.	Use Case Identification
+1.1.	Use Case ID
+Give each use case a unique integer sequence number identifier. Alternatively, use a hierarchical form: X.Y. Related use cases can be grouped in the hierarchy.
+1.2.	Use Case Name
+State a concise, results-oriented name for the use case. These reflect the tasks the user needs to be able to accomplish using the system. Include an action verb and a noun. Some examples:
+•	View part number information.
+•	Manually mark hypertext source and establish link to target.
+•	Place an order for a CD with the updated software version.
+1.3.	Use Case History
+1.1.1.	Created By
+Supply the name of the person who initially documented this use case.
+1.1.2.	Date Created
+Enter the date on which the use case was initially documented.
+1.1.3.	Last Updated By
+Supply the name of the person who performed the most recent update to the use case description.
+1.1.4.	Date Last Updated
+Enter the date on which the use case was most recently updated.
+3.	Use Case Definition
+1.1.	Actors
+An actor is a person or other entity external to the software system being specified who interacts with the system and performs use cases to accomplish tasks. Different actors often correspond to different user classes, or roles, identified from the customer community that will use the product. Name the ac-tor that will be initiating this use case and any other actors who will participate in completing the use case.
+1.2.	Trigger
+Identify the event that initiates the use case. This could be an external business event or system event that causes the use case to begin, or it could be the first step in the normal flow.
+1.3.	Description
+Provide a brief description of the reason for and outcome of this use case, or a high-level description of the sequence of actions and the outcome of executing the use case.
+1.4.	Preconditions
+List any activities that must take place, or any conditions that must be true, before the use case can be started. Number each precondition. Examples:
+1.	User’s identity has been authenticated.
+2.	User’s computer has sufficient free memory available to launch task.
+1.5.	Postconditions
+Describe the state of the system at the conclusion of the use case execution. Number each postcondi-tion. Examples:
+1.	Document contains only valid SGML tags.
+2.	Price of item in database has been updated with new value.
+1.6.	Normal Flow
+Provide a detailed description of the user actions and system responses that will take place during exe-cution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This description may be written as an answer to the hypothetical question, “How do I <accomplish the task stated in the use case name>?” This is best done as a numbered list of actions performed by the actor, alternating with responses pro-vided by the system. The normal flow is numbered “X.0”, where “X” is the Use Case ID.
+1.7.	Alternative Flows
+Document other, legitimate usage scenarios that can take place within this use case separately in this section. State the alternative flow, and describe any differences in the sequence of steps that take place. Number each alternative flow in the form “X.Y”, where “X” is the Use Case ID and Y is a sequence number for the alternative flow. For example, “5.3” would indicate the third alternative flow for use case number 5.
+1.8.	Exceptions
+Describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions. Also, describe how the system is to respond if the use case execution fails for some unanticipated reason. If the use case results in a durable state change in a database or the outside world, state whether the change is rolled back, completed correctly, partially completed with a known state, or left in an undetermined state as a result of the exception. Number each alternative flow in the form “X.Y.E.Z”, where “X” is the Use Case ID, Y indicates the normal (0) or alternative (>0) flow during which this exception could take place, “E” indicates an exception, and “Z” is a sequence number for the exceptions. For example “5.0.E.2” would indicate the second excep-tion for the normal flow for use case number 5.
+1.9.	Includes
+List any other use cases that are included (“called”) by this use case. Common functionality that ap-pears in multiple use cases can be split out into a separate use case that is included by the ones that need that common functionality.
+1.10.	Priority
+Indicate the relative priority of implementing the functionality required to allow this use case to be exe-cuted. The priority scheme used must be the same as that used in the software requirements specifica-tion.
+1.11.	Frequency of Use
+Estimate the number of times this use case will be performed by the actors per some appropriate unit of time.
+1.12.	Business Rules
+List any business rules that influence this use case.
+1.13.	Special Requirements
+Identify any additional requirements, such as nonfunctional requirements, for the use case that may need to be addressed during design or implementation. These may include performance requirements or other quality attributes.
+1.14.	Assumptions
+List any assumptions that were made in the analysis that led to accepting this use case into the product description and writing the use case description.
+1.15.	Notes and Issues
+List any additional comments about this use case or any remaining open issues or TBDs (To Be Deter-mineds) that must be resolved. Identify who will resolve each issue, the due date, and what the resolu-tion ultimately is.
+ 
+Use Case List
+A use case is a list of actions or event steps, typically defining the interactions between a role (an actor) and a system, to achieve a goal.
+ID	Primary Actor	Use Case Title
+1.0	App User	User Authentication
+2.0	App User	Event List (Home page)
+3.0	App User	Create New Event
+4.0	App User	Profile page
+5.0	App User	Filter Event 
+6.0	App User	Event Detail
+7.0	App User	Join
+8.0	App User	Message(?
+9.0	App User	
+10.0	System(?	
+
+
+
+ 
+Use Case Template
+Use Case ID:	1.0
+Use Case Name:	User Authentication
+Actors:	App User
+Description:	Authenticate user who tries to log in to the app (authenti-cated user is required for functionality).
+Trigger:	User clicks on “login” (or “signup”) buttons.
+Preconditions:	1. Username fits specified character requirements (validated with client-side logic).
+
+
+2. Password fits specified character requirements (validated with client-side logic.
+Postconditions:	1. If authentication succeeds, user is presented with a new view that allows access to authentication-required functions of the application. 
+
+2. If authentication fails, user is presented with a view that alerts them of the failure.
+Normal Flow:	When user first opens the app, it is just the login page. 
+Next, user clicks log in. After the user has authenticated, the user can then access more of the application's functionality.
+Alternative Flows:	
+Exceptions:	1.0.E.1: If an unaccounted error occurs then website/app gives a generic error message and asks user to reload the website. 1.0.E.2: If user inputs incorrect username and password then website/app tells the user their username/password is incor-rect and to re-enter the information.
+Includes:	Log in with facebook or BU email 
+Priority:	
+Frequency of Use:	Each time a user logs in or signs up.
+Business Rules:	
+Special Requirements:	
+Assumptions:	
+Notes and Issues:	
+
+
+
+
+Use Case ID:	2.0
+Use Case Name:	Event List
+Actors:	App User
+Description:	List of events users can click on
+Trigger:	The event list will be shown after the log in
+Preconditions:	User logged in successfully.
+Postconditions:	
+Normal Flow:	The users should see the list displayed, and able to scroll down
+Alternative Flows:	If the list cant be displayed, a message will show “error on the server side”
+Exceptions:	
+Includes:	Create evens, Profile, Filter
+Priority:	
+Frequency of Use:	Each time a user logs in or signs up.
+Business Rules:	
+Special Requirements:	
+Assumptions:	
+Notes and Issues:	
+
+
+
+
+Use Case ID:	3.0
+Use Case Name:	Create New Event
+Actors:	App User
+Description:	Users can create events and it will be shown on the list
+Trigger:	User clicks on “Create New Event”
+Preconditions:	1. User logged in successfully 
+
+
+2. the homepage is displayed properly
+Postconditions:	The new created event will be updated to the event list
+Normal Flow:	After creating a new event, the user will be redirect to the home page
+Alternative Flows:	
+Exceptions:	Soft delete, dirty reading 
+Includes:	“Cancel”, “Create”, “Home”
+Priority:	
+Frequency of Use:	
+Business Rules:	
+Special Requirements:	
+Assumptions:	
+Notes and Issues:	
+
+
+Use Case ID:	4.0
+Use Case Name:	Profile Page
+
+Actors:	App User
+Description:	Shows the users detail, mostly in text
+Trigger:	User clicks on “profile” buttons.
+Preconditions:	User login successfully, the server not down.
+Postconditions:	User can update their profile. 
+Normal Flow:	
+Alternative Flows:	
+Exceptions:	
+Includes:	
+Priority:	
+Frequency of Use:	
+Business Rules:	
+Special Requirements:	
+Assumptions:	
+Notes and Issues:	
+
+
+Use Case ID:	5.0
+Use Case Name:	Filter event
+
+
+
+Actors:	App User
+Description:	User can search for activity with the filter
+Trigger:	User clicks on “filter”.
+Preconditions:	User is logged in
+Postconditions:	The event list will be updated according to the filter. 
+Normal Flow:	
+Alternative Flows:	
+Exceptions:	
+Includes:	check boxes of many category 
+Priority:	
+Frequency of Use:	
+Business Rules:	
+Special Requirements:	
+Assumptions:	
+Notes and Issues:	
+
+Use Case ID:	6.0
+Use Case Name:	Event Detail
+Created By:		Last Updated By:	
+Date Created:		Date Last Updated:	
+
+
+Actors:	App User
+Description:	Details of a specific activity.
+Trigger:	Use clicks on the one of the event list.
+Preconditions:	
+Postconditions:	1.	User join the activity 
+2.	User message the activity owner
+Normal Flow:	After clicking “join”, will be redirected to
+Alternative Flows:	Click “home” and go back to the event list
+Exceptions:	
+Includes:	“Join” “Message”
+Priority:	
+Frequency of Use:	Each time a user logs in or signs up.
+Business Rules:	
+Special Requirements:	
+Assumptions:	
+Notes and Issues:	
+
+
+
+Use Case ID:	7.0
+Use Case Name:	Join
+Created By:		Last Updated By:	
+Date Created:		Date Last Updated:	
+
+
+
+Actors:	App User
+Description:	User can join the activity
+Trigger:	User clicks on “Join”
+Preconditions:	The event is not yet finished, people are not full(?
+Postconditions:	The owner will be notified that someone joined the event
+Normal Flow:	User’s name will be put under that event
+Alternative Flows:	
+Exceptions:	User failed to join, error message will pop up according to different error type
+Includes:	
+Priority:	
+Frequency of Use:	
+Business Rules:	
+Special Requirements:	
+Assumptions:	
+Notes and Issues:	
+
+
+Revision History
+
+Name	Date	Reason For Changes	Version
+			
+			
+
