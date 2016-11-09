@@ -1,0 +1,111 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.link.buddy.SearchFragment"
+    android:weightSum="3">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="75dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Search or checkbox"
+            android:id="@+id/tvSearch"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textPersonName"
+            android:text="Search terms"
+            android:ems="10"
+            android:id="@+id/etSearch"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:rowCount="4"
+        android:columnCount="3">
+
+        <CheckBox
+            android:text="Food"
+            android:layout_width="105dp"
+            android:layout_height="50dp"
+            android:id="@+id/checkFood"
+            android:checked="false"
+            android:layout_row="0"
+            android:layout_column="0" />
+
+        <CheckBox
+            android:text="Sports"
+            android:layout_width="105dp"
+            android:layout_height="50dp"
+            android:id="@+id/checkSports"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:checked="false" />
+
+        <CheckBox
+            android:text="Movie"
+            android:layout_width="105dp"
+            android:layout_height="50dp"
+            android:id="@+id/checkMovie"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:checked="false" />
+
+        <CheckBox
+            android:text="Exploring"
+            android:layout_width="105dp"
+            android:layout_height="50dp"
+            android:id="@+id/checkExploring"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:checked="false" />
+
+        <CheckBox
+            android:text="Other"
+            android:layout_width="105dp"
+            android:layout_height="50dp"
+            android:id="@+id/checkOther"
+            android:layout_row="2"
+            android:layout_column="0" />
+
+        <CheckBox
+            android:text="Study Break"
+            android:layout_width="105dp"
+            android:layout_height="50dp"
+            android:id="@+id/checkStudyBreak"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:checked="false" />
+
+    </GridLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <Button
+            android:text="Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnSearch"/>
+    </LinearLayout>
+
+</LinearLayout>
