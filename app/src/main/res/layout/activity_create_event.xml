@@ -31,6 +31,27 @@
             android:layout_centerHorizontal="true"
             android:layout_weight="1" />
     </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvnumber"
+            android:text="@string/numberpeople"
+            android:textSize="25dp"
+            android:layout_weight="1" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/etNumber"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
