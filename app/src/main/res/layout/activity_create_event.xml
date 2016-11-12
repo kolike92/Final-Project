@@ -147,7 +147,7 @@
             android:text="@string/detail"
             android:id="@+id/tvDetails"
             android:textSize="25dp"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="41dp"
             android:layout_weight="1"
             android:layout_gravity="top" />
 
