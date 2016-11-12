@@ -15,7 +15,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Event Title:"
+            android:text="@string/title"
             android:id="@+id/tvTitle"
             android:textSize="20sp" />
 
@@ -58,7 +58,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Location:"
+            android:text="@string/location"
             android:id="@+id/tvLocation"
             android:layout_weight="1"
             android:textSize="20sp" />
@@ -81,7 +81,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Details:"
+            android:text="@string/detail"
             android:id="@+id/tvDetails"
             android:layout_weight="1"
             android:textSize="20sp" />
@@ -103,7 +103,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Categories:"
+            android:text="@string/category"
             android:id="@+id/tvCategories"
             android:layout_weight="1"
             android:textSize="20sp" />
