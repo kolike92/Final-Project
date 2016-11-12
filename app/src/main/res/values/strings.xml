@@ -3,4 +3,10 @@
     <string name="facebook_app_id">1658751394414922</string>
     <string name="title">Event Title</string>
     <string name="numberpeople">Number of People</string>
+    <string name="location">Location </string>
+    <string name="category">Category </string>
+    <string name="detail">Details </string>
+    <string name="create">Create </string>
+    <string name="cancel">Cancel </string>
+    <string name="postBy">Post By</string>
 </resources>
