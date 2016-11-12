@@ -43,7 +43,7 @@ public class CreateEventActivity extends AppCompatActivity
     SimpleDateFormat sdf, stf;
     Calendar c;
     FragmentManager fragMan;
-  //  DatePicker dpDate;
+    //  DatePicker dpDate;
 
 
     @Override
@@ -62,7 +62,7 @@ public class CreateEventActivity extends AppCompatActivity
         spnCategories = (Spinner) findViewById(R.id.spnCategories);
         sdf = new SimpleDateFormat("MM-dd-yyyy");
         stf = new SimpleDateFormat("HH:mm");
-      //  dpDate = (DatePicker) findViewById(R.id.dpDate);
+        //  dpDate = (DatePicker) findViewById(R.id.dpDate);
         c = Calendar.getInstance();
         fragMan = getFragmentManager();
 
@@ -132,7 +132,7 @@ public class CreateEventActivity extends AppCompatActivity
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getBaseContext(),Home.class );
+                Intent i = new Intent(getBaseContext(),HomeActivity.class );
                 startActivity(i);
 
             }
