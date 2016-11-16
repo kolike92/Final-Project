@@ -63,7 +63,7 @@
         android:layout_weight="0.5">
 
         <TextView
-            android:text="Upcoming Activities"
+            android:text="@string/upAct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
@@ -106,7 +106,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:text="Past Activities"
+            android:text="@string/pastAct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView13"
@@ -151,7 +151,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:text="Your Activities"
+            android:text="@string/yourAct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView16"
@@ -187,7 +187,7 @@
                 android:layout_weight="1" />
 
             <Button
-                android:text="Home"
+                android:text="@string/home"
                 android:layout_width="76dp"
                 android:layout_height="35dp"
                 android:id="@+id/button5" />

@@ -15,7 +15,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Event Title:"
+            android:text="@string/title"
             android:id="@+id/tvTitle"
             android:textSize="20sp" />
 
@@ -36,7 +36,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date:"
+            android:text="@string/date"
             android:id="@+id/tvDate"
             android:layout_weight="1"
             android:textSize="20sp" />
@@ -58,7 +58,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Location:"
+            android:text="@string/location"
             android:id="@+id/tvLocation"
             android:layout_weight="1"
             android:textSize="20sp" />
@@ -81,7 +81,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Details:"
+            android:text="@string/detail"
             android:id="@+id/tvDetails"
             android:textSize="20sp" />
 
@@ -102,7 +102,7 @@
         <TextView
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:text="Categories:"
+            android:text="@string/category"
             android:id="@+id/tvCategories"
             android:textSize="20sp" />
     </LinearLayout>
@@ -116,7 +116,7 @@
         <TextView
             android:layout_width="206dp"
             android:layout_height="wrap_content"
-            android:text="Created By:"
+            android:text="@string/createby"
             android:id="@+id/tvCreatedBy"
             android:textSize="20sp" />
     </LinearLayout>
@@ -124,7 +124,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Message"
+        android:text="@string/message"
         android:id="@+id/button"
         android:layout_weight="1"
         android:layout_gravity="center_horizontal" />
@@ -132,7 +132,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Join"
+        android:text="@string/join"
         android:id="@+id/button2"
         android:layout_weight="1"
         android:layout_gravity="center_horizontal" />
