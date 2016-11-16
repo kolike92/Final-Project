@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Search"
+            android:text="@string/search"
             android:id="@+id/tvSearch"
             android:layout_weight="1" />
 
@@ -83,7 +83,7 @@
         android:layout_weight="1">
 
         <Button
-            android:text="Button"
+            android:text="@string/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

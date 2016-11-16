@@ -13,5 +13,16 @@
     <string name="createby">Created By </string>
     <string name="message">Message</string>
     <string name="join">Join </string>
+    <string name="filter"> Filter </string>
+    <string name="email"> Email: </string>
+    <string name="password"> Password: </string>
+    <string name="login"> Log In </string>
+    <string name="loginother"> Log in through other source: </string>
+    <string name="loginBU"> BU Login </string>
+    <string name="upAct"> Upcoming Activities </string>
+    <string name="pastAct"> Past Activities </string>
+    <string name="yourAct"> Your Activities </string>
+    <string name="home"> Home </string>
+    <string name="search"> Search </string>
 </resources>
 

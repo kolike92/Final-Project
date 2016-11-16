@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email: "
+            android:text="@string/email"
             android:id="@+id/tvEmail"
             android:textSize="30dp" />
 
@@ -38,7 +38,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Passport: "
+            android:text="@string/password"
             android:id="@+id/tvPassport"
             android:textSize="30dp" />
 
@@ -54,7 +54,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log In"
+        android:text="@string/login"
         android:layout_gravity="center_vertical|center_horizontal"
         android:id="@+id/btnLogin"
         android:layout_weight="0.09" />
@@ -62,7 +62,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log in through other source:"
+        android:text="@string/loginother"
         android:id="@+id/tvLocation"
         android:textSize="20dp" />
 
@@ -78,7 +78,7 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:text="BU"
+            android:text="@string/loginBU"
             android:id="@+id/btnBUlogin"
             android:layout_height="wrap_content" />
 
