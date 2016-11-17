@@ -1,12 +1,10 @@
-package com.example.link.buddy;
+package com.BUddy.android;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.widget.DatePicker;
 
 import java.util.Calendar;

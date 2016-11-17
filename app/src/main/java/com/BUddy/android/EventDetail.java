@@ -1,4 +1,4 @@
-package com.example.link.buddy;
+package com.BUddy.android;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

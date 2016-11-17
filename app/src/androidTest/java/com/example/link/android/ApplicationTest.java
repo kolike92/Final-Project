@@ -1,4 +1,4 @@
-package com.example.link.buddy;
+package com.example.link.android;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

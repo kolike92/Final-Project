@@ -1,4 +1,4 @@
-package com.example.link.buddy;
+package com.BUddy.android;
 
 /**
  * Created by rebeccagraber on 11/1/16.

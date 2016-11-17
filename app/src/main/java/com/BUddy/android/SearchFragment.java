@@ -1,4 +1,4 @@
-package com.example.link.buddy;
+package com.BUddy.android;
 
 
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.example.link.buddy.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -108,9 +107,6 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
-
-
-
 
         // Inflate the layout for this fragment
         return v;

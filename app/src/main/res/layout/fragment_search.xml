@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.link.buddy.SearchFragment"
+    tools:context="com.example.link.android.SearchFragment"
     android:weightSum="3">
 
     <!-- TODO: Update blank fragment layout -->

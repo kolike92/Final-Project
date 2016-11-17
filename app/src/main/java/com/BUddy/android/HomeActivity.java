@@ -1,4 +1,4 @@
-package com.example.link.buddy;
+package com.BUddy.android;
 
 import android.content.Context;
 import android.content.Intent;
