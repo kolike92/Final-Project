@@ -11,9 +11,16 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -22,6 +29,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,7 +47,14 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
     private Button btnBULogin;
     private static final int RC_SIGN_IN = 9001;
+    private static final int FB_SIGN_IN = 9002;
+    private TextView tvError;
 
+    private String email;
+    private BuddyUser user;
+
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference dbRef;
     //test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +82,21 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         callbackManager = CallbackManager.Factory.create();
 
         loginButton = (LoginButton) findViewById((R.id.login_button));
-        btnBULogin = (Button) findViewById(R.id.btnBUlogin);
+        loginButton.setReadPermissions("email");
+        btnBULogin = (Button) findViewById(R.id.btnLogin);
+        tvError = (TextView) findViewById(R.id.tvError);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dbRef = firebaseDatabase.getReference("users");
+
+
 
         btnBULogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +105,44 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
+
+        loginButton.registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        //check if user has connected with Facebook (i.e. has a uid in the db)
+                        AccessToken at = loginResult.getAccessToken();
+                        String fbid = at.getUserId();
+                        Query q = dbRef.orderByChild("fbId").equalTo(fbid);
+                        q.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(!dataSnapshot.exists())
+                                {
+                                    tvError.setText(getString(R.string.noFacebook));
+                                    LoginManager.getInstance().logOut();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                tvError.setText(getString(R.string.unknownSignInError));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        tvError.setText(getString(R.string.unknownSignInError));
+                    }
+                });
+
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -86,26 +153,73 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
-    }
-    // [END onActivityResult]
+        else
+        {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
 
-    // [START handleSignInResult]
+    }
+
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d("BUDDY", "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
+        if(!result.isSuccess())
+        {
+            tvError.setText(getString(R.string.unknownSignInError));
+        }
+        else {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            Log.d("BUDDY",acct.getEmail());
+            email = acct.getEmail();
+            //Log.d("BUDDY", acct.getEmail());
+            if (!email.endsWith("@bu.edu")) {
+                tvError.setText(getString(R.string.errorNotBU));
+                if (mGoogleApiClient.isConnected()) {
+                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                            new ResultCallback<Status>() {
+                                @Override
+                                public void onResult(Status status) {
+                                    Log.d("BUDDY", "User signed out successfully");
+                                }
+                            });
+                }
+                return;
+            }
+            Query q = dbRef.orderByChild("email").equalTo(email);
+            q.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(!dataSnapshot.exists())
+                    {
+                        user = new BuddyUser();
+                        user.setEmail(email);
+                        DatabaseReference eventRef = dbRef.push();
+                        //add new user to db
+                        eventRef.setValue(user);
+                    }
+                    else
+                    {
+                        user = dataSnapshot.getValue(BuddyUser.class);
+                    }
+                    Intent home = new Intent(getBaseContext(), HomeActivity.class);
+                    Bundle b = new Bundle();
+                    b.putParcelable("user",user);
 
-        } else {
-            // Signed out, show unauthenticated UI.
+                    home.putExtras(b);
+                    startActivity(home);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    tvError.setText(getString(R.string.unknownSignInError));
+                }
+            });
 
         }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        tvError.setText(getString(R.string.unknownSignInError));
     }
 }
 

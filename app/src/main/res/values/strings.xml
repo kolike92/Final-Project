@@ -24,5 +24,9 @@
     <string name="yourAct"> Your Activities </string>
     <string name="home"> Home </string>
     <string name="search"> Search </string>
+    <string name="loginkerberos">Log in with Kerberos</string>
+    <string name="errorNotBU">Please log in with your BU email</string>
+    <string name="unknownSignInError">An error occurred on log in. Please try again.</string>
+    <string name="noFacebook">Facebook user not recognized. Please log in with your Kerberos account and enable Facebook login</string>
 </resources>
 
