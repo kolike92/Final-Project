@@ -38,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
     long categories[] = new long[20];
     String eid[] = new String[20];
     ListAdapter lvAdapater;
+    BuddyUser user;
 
 
 
@@ -53,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         btnFilter = (Button) findViewById(R.id.btnFilter);
         btnCreatePost = (Button) findViewById(R.id.btnCreatePost);
         tvDate = (TextView) findViewById(R.id.tvDate);
+        user = getIntent().getExtras().getParcelable("user");
         Firebase.setAndroidContext(this);
 
 
@@ -114,6 +116,7 @@ public class HomeActivity extends AppCompatActivity {
                 String eventId = eid[position];
                 Intent intent = new Intent(getBaseContext(), EventDetail.class);
                 intent.putExtra("EventID", eventId);
+                intent.putExtra("user",user);
                 startActivity(intent);
             }
         });

@@ -122,6 +122,15 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                                     tvError.setText(getString(R.string.noFacebook));
                                     LoginManager.getInstance().logOut();
                                 }
+                                else {
+                                    user = dataSnapshot.getValue(BuddyUser.class);
+                                    Intent home = new Intent(getBaseContext(), HomeActivity.class);
+                                    Bundle b = new Bundle();
+                                    b.putParcelable("user",user);
+
+                                    home.putExtras(b);
+                                    startActivity(home);
+                                }
                             }
 
                             @Override

@@ -3,6 +3,7 @@ package com.BUddy.android;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class EventDetail extends AppCompatActivity{
     private Button btnMessage;
     private Button btnJoin;
     private BUEvent event;
+    private BuddyUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class EventDetail extends AppCompatActivity{
         //String  event_id = "-KVkHLDRUTMAOxF_XmfU";
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbEvent = db.getReference("events/" + event_id);
+        user = b.getParcelable("user");
 
         /* Set reference*/
         tvTitle = (TextView) findViewById(R.id.tvTitle);
@@ -54,6 +57,13 @@ public class EventDetail extends AppCompatActivity{
         tvCreatedBy = (TextView) findViewById(R.id.tvCreatedBy);
         btnMessage = (Button) findViewById(R.id.btnMessage);
         btnJoin = (Button) findViewById(R.id.btnJoin);
+
+        btnJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
