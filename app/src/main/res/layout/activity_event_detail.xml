@@ -162,9 +162,18 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:text="Where?"
+        android:id="@+id/btnMap"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:text="@string/join"
         android:id="@+id/btnJoin"
         android:layout_weight="1"
         android:layout_gravity="center_horizontal" />
+
 
 </LinearLayout>
