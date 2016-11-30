@@ -29,6 +29,8 @@ public class BUEvent {
         this.location = location;
     }
 
+
+
     public Date getEventDate() {
         return eventDate;
     }

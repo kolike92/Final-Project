@@ -13,8 +13,7 @@ import java.util.Date;
  * Created by rebeccagraber on 11/18/16.
  */
 
-public class BuddyUser implements Parcelable{
-    private String uid;
+public class BuddyUser implements Parcelable {
     private String name;
     private String phoneNum;
     private String email;
@@ -23,22 +22,38 @@ public class BuddyUser implements Parcelable{
     private ArrayList<String> likes;
     private String fbId;
 
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public BuddyUser createFromParcel(Parcel in) {
+            return new BuddyUser(in);
+        }
+
+        @Override
+        public BuddyUser[] newArray(int size) {
+            return new BuddyUser[0];
+        }
+
+    };
+
     private static final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
 
-    public BuddyUser()
-    {
+    public BuddyUser() {
         eids = new ArrayList<String>();
         likes = new ArrayList<String>();
     }
 
 
-    public String getUid() {
-        return uid;
+    public BuddyUser(String name, String phoneNum, String email, Date dob,
+                     ArrayList<String> eids, ArrayList<String> likes, String fbId)
+    {
+       this.name = name;
+        this.phoneNum = phoneNum;
+        this.email = email;
+        this.dob = dob;
+        this.eids = eids;
+        this.likes = likes;
+        this.fbId = fbId;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 
     public String getName() {
         return name;
@@ -49,7 +64,6 @@ public class BuddyUser implements Parcelable{
     }
 
 
-
     public String getEmail() {
         return email;
     }
@@ -57,7 +71,6 @@ public class BuddyUser implements Parcelable{
     public void setEmail(String email) {
         this.email = email;
     }
-
 
 
     public ArrayList<String> getEids() {
@@ -97,20 +110,16 @@ public class BuddyUser implements Parcelable{
         return 0;
     }
 
-    private BuddyUser (Parcel in)
-    {
+    private BuddyUser(Parcel in) {
         eids = new ArrayList<>();
         likes = new ArrayList<>();
-        uid = in.readString();
         name = in.readString();
         phoneNum = in.readString();
         email = in.readString();
         String d = in.readString();
         try {
             dob = sdf.parse(d);
-        }
-        catch (ParseException pe)
-        {
+        } catch (ParseException pe) {
             Log.e("BUDDY", "Error: unparseable date of birth: " + d);
         }
         in.readStringList(eids);
@@ -119,13 +128,17 @@ public class BuddyUser implements Parcelable{
 
 
     }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(uid);
         dest.writeString(name);
         dest.writeString(phoneNum);
         dest.writeString(email);
-        dest.writeString(sdf.format(dob));
+        if (dob != null) {
+            dest.writeString(sdf.format(dob));
+        } else {
+            dest.writeString("");
+        }
         dest.writeStringList(eids);
         dest.writeStringList(likes);
         dest.writeString(fbId);
@@ -138,4 +151,6 @@ public class BuddyUser implements Parcelable{
     public void setFbId(String fbId) {
         this.fbId = fbId;
     }
+
+
 }

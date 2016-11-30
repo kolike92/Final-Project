@@ -207,7 +207,10 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                     }
                     else
                     {
-                        user = dataSnapshot.getValue(BuddyUser.class);
+                        Iterable<DataSnapshot> childSnap = dataSnapshot.getChildren();
+                        for(DataSnapshot d: childSnap) { //there should only be one...
+                            user = d.getValue(BuddyUser.class);
+                        }
                     }
                     Intent home = new Intent(getBaseContext(), HomeActivity.class);
                     Bundle b = new Bundle();
