@@ -30,6 +30,8 @@ public class CreateEventActivity extends AppCompatActivity
     SimpleDateFormat sdf, stf;
     Calendar c;
     FragmentManager fragMan;
+    BuddyUser user;
+
     //  DatePicker dpDate;
 
 
@@ -38,6 +40,7 @@ public class CreateEventActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
+        user = getIntent().getExtras().getParcelable(StaticConstants.USER_KEY);
         btnCreate = (Button) findViewById(R.id.btnCreate);
         btnCancel = (Button) findViewById(R.id.btnCancel);
         etTitle = (EditText) findViewById(R.id.etTitle);
@@ -79,7 +82,7 @@ public class CreateEventActivity extends AppCompatActivity
             public void onClick(View v) {
                 String title = etTitle.getText().toString();
                 String location = etLocation.getText().toString();
-                String number = etNumber.getText().toString();
+                int number = Integer.parseInt(etNumber.getText().toString());
                 //fake date
                 int day = 1;//dpDate.getDayOfMonth();
                 int month = 1;//dpDate.getMonth();
@@ -110,9 +113,17 @@ public class CreateEventActivity extends AppCompatActivity
 
                 Date d = c.getTime();
                 EventCategory category = (EventCategory) spnCategories.getSelectedItem();
-                BUEvent e = new BUEvent(d, title, number, details, category.getId(), location);
+                BUEvent e = new BUEvent(d, title, number, details, category.getId(), location, user.getFirebaseId());
                 DatabaseReference eventRef = myRef.push();
+                e.setFirebaseId(eventRef.getKey());
                 eventRef.setValue(e);
+
+                Intent intent = new Intent(getBaseContext(), EventDetail.class);
+                Bundle b = new Bundle();
+                b.putParcelable(StaticConstants.EVENT_KEY, e);
+                b.putParcelable(StaticConstants.USER_KEY, user);
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
 
@@ -121,6 +132,7 @@ public class CreateEventActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(),HomeActivity.class );
                 startActivity(i);
+
 
             }
         });
