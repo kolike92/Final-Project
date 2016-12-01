@@ -1,17 +1,23 @@
 package com.BUddy.android;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Sophia_ on 10/31/16.
@@ -32,6 +38,7 @@ public class EventDetail extends AppCompatActivity{
     private Button btnJoin;
     private BUEvent event;
     private BuddyUser user;
+    private  Button btnMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +64,16 @@ public class EventDetail extends AppCompatActivity{
         tvCreatedBy = (TextView) findViewById(R.id.tvCreatedBy);
         btnMessage = (Button) findViewById(R.id.btnMessage);
         btnJoin = (Button) findViewById(R.id.btnJoin);
+        btnMap = (Button) findViewById(R.id.btnMap);
 
         btnJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -71,10 +86,10 @@ public class EventDetail extends AppCompatActivity{
                 // Get Post object and use the values to update the UI
                 event = dataSnapshot.getValue(BUEvent.class);
                 tvTitleSet.setText(event.getEventTitle());
-                tvDateSet.setText(event.getEventDate().toString());
+                //tvDateSet.setText(event.getEventDate().toString());
                 tvLocationSet.setText(event.getLocation());
-                tvCategories.setText(event.getCategory());
-                tvDetailsSet.setText(event.getEventDetails());
+                //tvCategories.setText(event.getCategory());
+               // tvDetailsSet.setText(event.getEventDetails());
                 // ...
             }
 

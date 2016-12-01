@@ -36,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
     String titles[] = new String[20];
     String descriptions[] = new String[20];
     long categories[] = new long[20];
+    String createdby[] = new String[20];
+    String createdTime[] = new String[20];
     String eid[] = new String[20];
     ListAdapter lvAdapater;
     BuddyUser user;
@@ -77,21 +79,8 @@ public class HomeActivity extends AppCompatActivity {
                         Log.d("Buddy data retrieve", child_c.getValue().toString());
                         titles[count] = (String) child_c.child("eventTitle").getValue();
                         descriptions[count]=(String) child_c.child("eventDetails").getValue();
-                        categories[count] = (long) child_c.child("category").getValue();
+                        //categories[count] = (long) child_c.child("category").getValue();
                         eid[count] = (String) child_c.getKey();
-
-                        /*
-                        if ( child_c.getValue().equals("eventTitle")) {
-                            titles[count] = child_c.getValue().toString();
-                        }
-                        */
-
-                        /*
-                        titles[count] = child_c.getKey();
-                        descriptions[count] = child_c.getChildren().toString();
-                        times[count] = child_c.getChildren().toString();
-                        owners[count] = child_c.getChildren().toString();
-                        */
                         count++;
                     }
                 }
@@ -106,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-        lvAdapater = new EventListAdapter(this.getBaseContext(), titles, descriptions, categories);
+        lvAdapater = new EventListAdapter(this.getBaseContext(), titles, descriptions, categories,createdby, createdTime);
         lvActivities.setAdapter(lvAdapater);
 
 
@@ -121,6 +110,29 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        btnCreatePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent createEvent = new Intent(getBaseContext(), CreateEventActivity.class);
+                Bundle b = new Bundle();
+                b.putParcelable("user",user);
+
+                createEvent.putExtras(b);
+                startActivity(createEvent);
+            }
+        });
+
+        ibtnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profile = new Intent(getBaseContext(), Profile.class);
+                Bundle b = new Bundle();
+                b.putParcelable("user",user);
+
+                profile.putExtras(b);
+                startActivity(profile);
+            }
+        });
 
 
 
@@ -132,6 +144,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+
 }
 
 class EventListAdapter extends BaseAdapter {
@@ -140,19 +153,19 @@ class EventListAdapter extends BaseAdapter {
     private long categories[];
     private String eventDescriptions[];
 
-    //private String createTimes[];
-    //private String createdBy[];
+    private String createTimes[];
+    private String createdBy[];
 
 
     Context context;
 
-    public EventListAdapter(Context aContext,String[] EventTitles, String[] EventDescriptions, long[] c) {
+    public EventListAdapter(Context aContext,String[] EventTitles, String[] EventDescriptions, long[] c, String[] CreateTimes, String[] CreatedBy) {
         context = aContext;
         eventTitles = EventTitles;
         eventDescriptions = EventDescriptions;
         categories = c;
-        //createTimes = CreateTimes;
-        //createdBy = CreatedBy;
+        createTimes = CreateTimes;
+        createdBy = CreatedBy;
 
     }
 
@@ -186,8 +199,14 @@ class EventListAdapter extends BaseAdapter {
         TextView tvCreateTime = (TextView) row.findViewById(R.id.tvCreateTime);
         TextView tvCreatedBy = (TextView) row.findViewById(R.id.tvCreatedBy);
 
-        tvEventTitle.setText(eventTitles[position]);
-        tvEventDescription.setText(eventDescriptions[position]);
+        try{
+            tvEventTitle.setText(eventTitles[position]);
+            tvEventDescription.setText(eventDescriptions[position]);
+            tvCreatedBy.setText(createdBy[position]);
+            tvCreateTime.setText(createTimes[position]);
+        }
+        catch (Exception e){}
+
 
 
 
