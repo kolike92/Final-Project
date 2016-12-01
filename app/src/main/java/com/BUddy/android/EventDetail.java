@@ -1,7 +1,9 @@
 package com.BUddy.android;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
@@ -39,13 +42,18 @@ public class EventDetail extends AppCompatActivity{
     private BUEvent event;
     private BuddyUser user;
     private  Button btnMap;
+    private String creatorPhoneNo;
+    private String creatorString;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference dbRef;
+    private BuddyUser creator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         Bundle b = getIntent().getExtras();
-        String event_id = b.getString("EventID");
+        final String event_id = b.getString("EventID");
         //String  event_id = "-KVkHLDRUTMAOxF_XmfU";
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbEvent = db.getReference("events/" + event_id);
@@ -66,6 +74,22 @@ public class EventDetail extends AppCompatActivity{
         btnJoin = (Button) findViewById(R.id.btnJoin);
         btnMap = (Button) findViewById(R.id.btnMap);
 
+        btnMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                String message = "Say Hello";
+
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.putExtra("sms_body", message);
+                sendIntent.putExtra("address", creatorPhoneNo);
+                sendIntent.setType("vnd.android-dir/mms-sms");
+                startActivity(sendIntent);
+            }
+        });
+
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +100,7 @@ public class EventDetail extends AppCompatActivity{
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
             }
         });
@@ -90,6 +115,8 @@ public class EventDetail extends AppCompatActivity{
                 tvLocationSet.setText(event.getLocation());
                 //tvCategories.setText(event.getCategory());
                // tvDetailsSet.setText(event.getEventDetails());
+                creatorString = event.getCreator();
+
                 // ...
             }
 
@@ -101,6 +128,27 @@ public class EventDetail extends AppCompatActivity{
             }
         };
         dbEvent.addListenerForSingleValueEvent(postListener);
+
+
+        DatabaseReference dbCreator = db.getReference("users/" + creatorString);
+        ValueEventListener creatorListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                creator = dataSnapshot.getValue(BuddyUser.class);
+                creatorPhoneNo = creator.getPhoneNum();
+
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("BUDDY", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        dbCreator.addListenerForSingleValueEvent(creatorListener);
 
 
     }
