@@ -21,6 +21,7 @@ public class BuddyUser implements Parcelable {
     private ArrayList<String> eids;
     private ArrayList<String> likes;
     private String fbId;
+    private String firebaseId;
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public BuddyUser createFromParcel(Parcel in) {
@@ -34,7 +35,7 @@ public class BuddyUser implements Parcelable {
 
     };
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+
 
     public BuddyUser() {
         eids = new ArrayList<String>();
@@ -118,7 +119,7 @@ public class BuddyUser implements Parcelable {
         email = in.readString();
         String d = in.readString();
         try {
-            dob = sdf.parse(d);
+            dob = StaticConstants.SDF.parse(d);
         } catch (ParseException pe) {
             Log.e("BUDDY", "Error: unparseable date of birth: " + d);
         }
@@ -135,7 +136,7 @@ public class BuddyUser implements Parcelable {
         dest.writeString(phoneNum);
         dest.writeString(email);
         if (dob != null) {
-            dest.writeString(sdf.format(dob));
+            dest.writeString(StaticConstants.SDF.format(dob));
         } else {
             dest.writeString("");
         }
@@ -152,5 +153,30 @@ public class BuddyUser implements Parcelable {
         this.fbId = fbId;
     }
 
+    public void addEvent(String eid)
+    {
+        if(eids == null)
+        {
+            eids = new ArrayList<String>();
+        }
+        eids.add(eid);
+    }
 
+    public void removeEvent(String eid)
+    {
+        if(eids == null)
+        {
+            eids = new ArrayList<String>();
+        }
+        eids.remove(eid);
+    }
+
+
+    public String getFirebaseId() {
+        return firebaseId;
+    }
+
+    public void setFirebaseId(String firebaseId) {
+        this.firebaseId = firebaseId;
+    }
 }
