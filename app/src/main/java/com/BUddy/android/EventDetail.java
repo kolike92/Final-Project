@@ -147,7 +147,8 @@ public class EventDetail extends InnerActivity{
             @Override
             public void onClick(View v) {
                 String intentData = tvLocationSet.getText().toString();;  //refers to the textbox at the top, [optional] fill in with a string if you want to pass to the next activity.
-                Intent NextScreen = new Intent(Intent.ACTION_VIEW);  //this is another way of identifying your destination class, Intent constructor is overloaded to also take string.
+                Uri gmmIntentUri = Uri.parse("geo:42.35,-71.11?q="+intentData);
+                Intent NextScreen = new Intent(Intent.ACTION_VIEW, gmmIntentUri);  //this is another way of identifying your destination class, Intent constructor is overloaded to also take string.
                 NextScreen.putExtra("GeneralIntentData", intentData);
                 startActivity(NextScreen);
             }
