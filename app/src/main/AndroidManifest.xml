@@ -3,6 +3,7 @@
     package="com.BUddy.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <provider
         android:name="com.facebook.FacebookContentProvider"

@@ -1,6 +1,12 @@
 package com.BUddy.android;
 
 import android.content.Intent;
+//<<<<<<< HEAD
+//=======
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
+//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,8 +20,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+//<<<<<<< HEAD
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+//=======
+import com.google.firebase.database.Query;
+//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -44,6 +54,7 @@ public class EventDetail extends InnerActivity{
     private Button btnJoin;
     private BUEvent event;
     private BuddyUser user;
+//<<<<<<< HEAD
     private String eventId;
 
 
@@ -56,6 +67,14 @@ public class EventDetail extends InnerActivity{
 
 
 
+//=======
+    private  Button btnMap;
+    private String creatorPhoneNo;
+    private String creatorString;
+    FirebaseDatabase firebaseDatabase;
+
+    private BuddyUser creator;
+//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +84,7 @@ public class EventDetail extends InnerActivity{
      //   joinListener = new JoinListener();
 
         Bundle b = getIntent().getExtras();
+//<<<<<<< HEAD
 
         //if this was called from saveInstanceState, get the info from there
         if(savedInstanceState != null)
@@ -81,7 +101,11 @@ public class EventDetail extends InnerActivity{
         }
 
 
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
+//=======
+
+        //String  event_id = "-KVkHLDRUTMAOxF_XmfU";
+//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
+        final FirebaseDatabase db = FirebaseDatabase.getInstance();
         dbEvent = db.getReference("events/" + eventId);
         dbUser = db.getReference("users/" + user.getFirebaseId());
 
@@ -102,6 +126,22 @@ public class EventDetail extends InnerActivity{
         btnJoin = (Button) findViewById(R.id.btnJoin);
 
 
+
+        btnMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                String message = "Say Hello";
+
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.putExtra("sms_body", message);
+                sendIntent.putExtra("address", creatorPhoneNo);
+                sendIntent.setType("vnd.android-dir/mms-sms");
+                startActivity(sendIntent);
+            }
+        });
 
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +220,7 @@ public class EventDetail extends InnerActivity{
                     }
                 });
 
+
             }
         });
 
@@ -187,6 +228,7 @@ public class EventDetail extends InnerActivity{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
+//<<<<<<< HEAD
                 if(dataSnapshot.exists()) {
                     event = dataSnapshot.getValue(BUEvent.class);
                     tvTitleSet.setText(event.getEventTitle());
@@ -219,7 +261,35 @@ public class EventDetail extends InnerActivity{
                         }
                     }
                 }
-                // ...
+//=======
+                event = dataSnapshot.getValue(BUEvent.class);
+                tvTitleSet.setText(event.getEventTitle());
+                //tvDateSet.setText(event.getEventDate().toString());
+                tvLocationSet.setText(event.getLocation());
+                //tvCategories.setText(event.getCategory());
+               // tvDetailsSet.setText(event.getEventDetails());
+                creatorString = event.getCreator();
+                DatabaseReference dbCreator = db.getReference("users/" + creatorString);
+                ValueEventListener creatorListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get Post object and use the values to update the UI
+                        creator = dataSnapshot.getValue(BuddyUser.class);
+                        creatorPhoneNo = creator.getPhoneNum();
+
+                        // ...
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Getting Post failed, log a message
+                        Log.w("BUDDY", "loadPost:onCancelled", databaseError.toException());
+                        // ...
+                    }
+                };
+                dbCreator.addListenerForSingleValueEvent(creatorListener);
+
+
             }
 
             @Override
@@ -251,12 +321,18 @@ public class EventDetail extends InnerActivity{
     }
 
 
+//<<<<<<< HEAD
     @Override
     protected void onDestroy()
     {
 
         Log.d(StaticConstants.TAG, "onDestroy");
         super.onDestroy();
+//=======
+
+
+
+//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
     }
 
     @Override
