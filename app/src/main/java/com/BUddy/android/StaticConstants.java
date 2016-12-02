@@ -12,7 +12,9 @@ public class StaticConstants {
     public static final String UID_KEY = "UID";
     public static final String USER_KEY = "USER";
     public static final String EVENT_KEY = "EVENT";
+    public static final String EMAIL_KEY = "EMAIL";
     public static final String TAG = "BUDDY";
+
 
     public static final SimpleDateFormat SDF = new SimpleDateFormat("MM-dd-yyyy");
 

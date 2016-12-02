@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,96 +18,110 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 
 /**
  * Created by Sophia_ on 10/31/16.
  */
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends InnerActivity {
     private ImageButton ibtnProfile;
     private ListView lvActivities;
     private Button btnFilter;
     private Button btnCreatePost;
     private TextView tvDate;
-    private
-    String titles[] = new String[20];
-    String descriptions[] = new String[20];
-    long categories[] = new long[20];
-    String createdby[] = new String[20];
-    String createdTime[] = new String[20];
-    String eid[] = new String[20];
-    ListAdapter lvAdapater;
-    BuddyUser user;
 
+    ListAdapter lvAdapater;
+
+    private ArrayList<BUEvent> events;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference dbRef;
 
 
 
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(StaticConstants.TAG, "onCreate called in HomeActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
+        events = new ArrayList<BUEvent>();
         ibtnProfile = (ImageButton) findViewById(R.id.ibtnProfile);
         lvActivities = (ListView) findViewById(R.id.lvActivities);
         btnFilter = (Button) findViewById(R.id.btnFilter);
         btnCreatePost = (Button) findViewById(R.id.btnCreatePost);
+        Bundle b = getIntent().getExtras();
         tvDate = (TextView) findViewById(R.id.tvDate);
-        user = getIntent().getExtras().getParcelable("user");
+        user = getIntent().getExtras().getParcelable(StaticConstants.USER_KEY);
+        String s = getIntent().getExtras().getString("something");
         Firebase.setAndroidContext(this);
 
 
-
-        Firebase ref = new Firebase("https://buddy-a4223.firebaseio.com/");
-
-
-
-
-
-        ref.addValueEventListener(new ValueEventListener() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        long now = System.currentTimeMillis();
+        dbRef = firebaseDatabase.getReference("events");
+        Query q = firebaseDatabase.getReference("events").orderByChild("eventDate/time").startAt(now);
+        q.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int count = 0;
-                for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    for (DataSnapshot child_c : child.getChildren()) {
-                        if ( count >= 20) {
-                            break;
-                        }
-                        Log.d("Buddy data retrieve", child_c.getValue().toString());
-                        titles[count] = (String) child_c.child("eventTitle").getValue();
-                        descriptions[count]=(String) child_c.child("eventDetails").getValue();
-                        //categories[count] = (long) child_c.child("category").getValue();
-                        eid[count] = (String) child_c.getKey();
-                        count++;
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    Iterable<com.google.firebase.database.DataSnapshot> children = dataSnapshot.getChildren();
+                    for(com.google.firebase.database.DataSnapshot d: children)
+                    {
+                        BUEvent eAdd = d.getValue(BUEvent.class);
+                        events.add(eAdd);
                     }
-                }
 
+                    lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase);
+                    lvActivities.setAdapter(lvAdapater);
+                }
             }
 
-
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+        Firebase ref = new Firebase("https://buddy-a4223.firebaseio.com/");
 
-
-        lvAdapater = new EventListAdapter(this.getBaseContext(), titles, descriptions, categories,createdby, createdTime);
-        lvActivities.setAdapter(lvAdapater);
 
 
         lvActivities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String eventId = eid[position];
+                BUEvent e = events.get(position);
+                String eventId = e.getFirebaseId();
                 Intent intent = new Intent(getBaseContext(), EventDetail.class);
-                intent.putExtra("EventID", eventId);
-                intent.putExtra("user",user);
+                intent.putExtra(StaticConstants.EID_KEY, eventId);
+                intent.putExtra(StaticConstants.EVENT_KEY, e);
+                intent.putExtra(StaticConstants.USER_KEY,user);
                 startActivity(intent);
             }
         });
@@ -115,7 +131,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent createEvent = new Intent(getBaseContext(), CreateEventActivity.class);
                 Bundle b = new Bundle();
-                b.putParcelable("user",user);
+                b.putParcelable(StaticConstants.USER_KEY,user);
 
                 createEvent.putExtras(b);
                 startActivity(createEvent);
@@ -127,7 +143,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent profile = new Intent(getBaseContext(), Profile.class);
                 Bundle b = new Bundle();
-                b.putParcelable("user",user);
+                b.putParcelable(StaticConstants.USER_KEY,user);
 
                 profile.putExtras(b);
                 startActivity(profile);
@@ -144,34 +160,32 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-
 }
 
 class EventListAdapter extends BaseAdapter {
 
-    private String eventTitles[];
-    private long categories[];
-    private String eventDescriptions[];
 
-    private String createTimes[];
-    private String createdBy[];
+
+    private ArrayList<BUEvent> buEvents;
+    private FirebaseDatabase firebaseDatabase;
+
+   // private TextView tvCreatedBy; //this is passed around
+
+
 
 
     Context context;
 
-    public EventListAdapter(Context aContext,String[] EventTitles, String[] EventDescriptions, long[] c, String[] CreateTimes, String[] CreatedBy) {
+    public EventListAdapter(Context aContext, ArrayList<BUEvent> buEvents, FirebaseDatabase firebaseDatabase) {
         context = aContext;
-        eventTitles = EventTitles;
-        eventDescriptions = EventDescriptions;
-        categories = c;
-        createTimes = CreateTimes;
-        createdBy = CreatedBy;
+        this.buEvents = buEvents;
+        this.firebaseDatabase = firebaseDatabase;
 
     }
 
     @Override
     public int getCount() {
-        return eventTitles.length;
+        return buEvents.size();
     }
     @Override
     public long getItemId(int position){
@@ -181,7 +195,7 @@ class EventListAdapter extends BaseAdapter {
 
      @Override
     public Object getItem(int position) {
-        return position;
+        return buEvents.get(position);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -197,13 +211,33 @@ class EventListAdapter extends BaseAdapter {
         TextView tvEventTitle = (TextView) row.findViewById(R.id.tvEventTitle);
         TextView tvEventDescription = (TextView) row.findViewById(R.id.tvEventDescription);
         TextView tvCreateTime = (TextView) row.findViewById(R.id.tvCreateTime);
-        TextView tvCreatedBy = (TextView) row.findViewById(R.id.tvCreatedBy);
+        final TextView tvCreatedBy = (TextView) row.findViewById(R.id.tvEventOwner);
 
         try{
-            tvEventTitle.setText(eventTitles[position]);
-            tvEventDescription.setText(eventDescriptions[position]);
-            tvCreatedBy.setText(createdBy[position]);
-            tvCreateTime.setText(createTimes[position]);
+            BUEvent thisEvent = buEvents.get(position);
+            tvEventTitle.setText(thisEvent.getEventTitle());
+            tvEventDescription.setText(thisEvent.getEventDetails());
+
+            DatabaseReference dbCreator = firebaseDatabase.getReference("users/" + thisEvent.getCreator());
+            dbCreator.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                @Override
+                public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists())
+                    {
+                        BuddyUser creator = dataSnapshot.getValue(BuddyUser.class);
+                        if(creator != null) tvCreatedBy.setText(creator.getEmail());
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            tvCreateTime.setText(StaticConstants.SDF.format(thisEvent.getEventDate()));
         }
         catch (Exception e){}
 
@@ -214,4 +248,7 @@ class EventListAdapter extends BaseAdapter {
 
 
     }
+
+
+
 }

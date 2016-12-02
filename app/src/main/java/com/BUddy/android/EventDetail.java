@@ -1,12 +1,12 @@
 package com.BUddy.android;
 
-import android.location.Address;
-import android.location.Geocoder;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,68 +14,171 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Sophia_ on 10/31/16.
  */
 
-public class EventDetail extends AppCompatActivity{
+public class EventDetail extends InnerActivity{
     private TextView tvTitle;
-    private TextView tvTitleSet;
+    private EditText tvTitleSet;
     private TextView tvDate;
-    private TextView tvDateSet;
+    private EditText tvDateSet;
     private TextView tvLocation;
-    private TextView tvLocationSet;
+    private EditText tvLocationSet;
     private TextView tvDetails;
-    private TextView tvDetailsSet;
+    private EditText tvDetailsSet;
     private TextView tvCategories;
     private TextView tvCreatedBy;
     private Button btnMessage;
     private Button btnJoin;
     private BUEvent event;
     private BuddyUser user;
-    private  Button btnMap;
+    private String eventId;
+
+
+    private DatabaseReference dbUser;
+    private DatabaseReference dbEvent;
+    private DatabaseReference dbRef;
+
+    private boolean joined;
+    private boolean isOwner;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+
+     //   joinListener = new JoinListener();
+
         Bundle b = getIntent().getExtras();
-        String event_id = b.getString("EventID");
-        //String  event_id = "-KVkHLDRUTMAOxF_XmfU";
+
+        //if this was called from saveInstanceState, get the info from there
+        if(savedInstanceState != null)
+        {
+            user = savedInstanceState.getParcelable(StaticConstants.USER_KEY);
+            event = savedInstanceState.getParcelable(StaticConstants.EVENT_KEY);
+            eventId = savedInstanceState.getString(StaticConstants.EID_KEY);
+        }
+        else if (b != null && (user == null || event == null)) //if we have a bundle and we don't already have the info we need
+        {
+            user = (BuddyUser) b.getParcelable(StaticConstants.USER_KEY);
+            event = (BUEvent) b.getParcelable(StaticConstants.EVENT_KEY);
+            eventId =  b.getString(StaticConstants.EID_KEY);
+        }
+
+
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference dbEvent = db.getReference("events/" + event_id);
-        user = b.getParcelable("user");
+        dbEvent = db.getReference("events/" + eventId);
+        dbUser = db.getReference("users/" + user.getFirebaseId());
+
+        
 
         /* Set reference*/
         tvTitle = (TextView) findViewById(R.id.tvTitle);
-        tvTitleSet = (TextView) findViewById(R.id.tvTitleSet);
+        tvTitleSet = (EditText) findViewById(R.id.tvTitleSet);
         tvDate = (TextView) findViewById(R.id.tvDate);
-        tvDateSet = (TextView) findViewById(R.id.tvDateSet);
+        tvDateSet = (EditText) findViewById(R.id.tvDateSet);
         tvLocation = (TextView) findViewById(R.id.tvLocation);
-        tvLocationSet = (TextView) findViewById(R.id.tvLocationSet);
+        tvLocationSet = (EditText) findViewById(R.id.tvLocationSet);
         tvDetails = (TextView) findViewById(R.id.tvDetails);
-        tvDetailsSet = (TextView) findViewById(R.id.tvDetailsSet);
+        tvDetailsSet = (EditText) findViewById(R.id.tvDetailsSet);
         tvCategories = (TextView) findViewById(R.id.tvCategories);
         tvCreatedBy = (TextView) findViewById(R.id.tvCreatedBy);
         btnMessage = (Button) findViewById(R.id.btnMessage);
         btnJoin = (Button) findViewById(R.id.btnJoin);
-        btnMap = (Button) findViewById(R.id.btnMap);
+
+
 
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //this is a weird way of doing it but there is pretty much no good way to update
+                //multiple objects in one transaction, so we use 2
 
-            }
-        });
+               if (isOwner)
+                {
+                //cancel event
+                    dbEvent.removeValue();
+                    Toast.makeText(getApplicationContext(), "Canceling event", Toast.LENGTH_LONG).show();
+                    Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                    home.putExtra(StaticConstants.USER_KEY, user);
+                    startActivity(home);
+                    return;
+                }
+                dbEvent.runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        BUEvent current = mutableData.getValue(BUEvent.class);
+                        if (current != null) {
+                            event = current;
+                        }
 
-        btnMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                        if (event.getParticipants().size() > event.getMaxParticipants()) {
+                            Toast.makeText(getBaseContext(), "Oops, someone beat you to it!", Toast.LENGTH_LONG);
+                            return Transaction.abort();
+                        } else {
+                            if(joined) {
+                                event.removeParticipant(user.getFirebaseId());
+                            }
+                            else {
+                                event.addParticipant(user.getFirebaseId());
+                            }
+                            mutableData.setValue(event);
+                        }
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                        Log.d(StaticConstants.TAG, "Yo");
+                    }
+                });
+                dbUser.runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        BuddyUser current = mutableData.getValue(BuddyUser.class);
+                        if (current != null) {
+                            user = current;
+                        }
+
+                            if(joined) {
+                                user.removeEvent(event.getFirebaseId());
+                            }
+                            else {
+                                user.addEvent(event.getFirebaseId());
+                            }
+                            mutableData.setValue(user);
+
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                        if(databaseError != null) Log.d(StaticConstants.TAG, databaseError.getMessage());
+                        else {
+                            joined = !joined;
+                            setJoinButtonText();
+                            String left_or_joined = joined ? "joined" : "left";
+                            Toast.makeText(getApplicationContext(),
+                                    "You have " + left_or_joined + " the activity " + event.getEventTitle(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
 
             }
         });
@@ -84,12 +187,38 @@ public class EventDetail extends AppCompatActivity{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                event = dataSnapshot.getValue(BUEvent.class);
-                tvTitleSet.setText(event.getEventTitle());
-                //tvDateSet.setText(event.getEventDate().toString());
-                tvLocationSet.setText(event.getLocation());
-                //tvCategories.setText(event.getCategory());
-               // tvDetailsSet.setText(event.getEventDetails());
+                if(dataSnapshot.exists()) {
+                    event = dataSnapshot.getValue(BUEvent.class);
+                    tvTitleSet.setText(event.getEventTitle());
+                    tvDateSet.setText(StaticConstants.SDF.format(event.getEventDate()));
+                    Calendar c = Calendar.getInstance();
+                    Date now = c.getTime();
+                    if (now.after(event.getEventDate())) {
+                        btnJoin.setClickable(false);
+                    }
+
+
+                    tvLocationSet.setText(event.getLocation());
+                    tvCategories.setText(EventCategory.getById(event.getCategory()).getName());
+                    tvDetailsSet.setText(event.getEventDetails());
+                    if (event.getCreator() != null && event.getCreator().equals(user.getFirebaseId())) {
+                        isOwner = true;
+                        btnJoin.setText("Cancel Event");
+
+
+                    } else {
+                        tvTitleSet.setEnabled(false);
+                        tvDateSet.setEnabled(false);
+                        tvLocationSet.setEnabled(false);
+                        tvTitleSet.setEnabled(false);
+                        if (event.getParticipants().size() >= event.getMaxParticipants()) {
+                            btnJoin.setText("Sorry, this event is full");
+
+                        } else {
+                            // btnJoin.setOnClickListener(joinListener);
+                        }
+                    }
+                }
                 // ...
             }
 
@@ -100,8 +229,43 @@ public class EventDetail extends AppCompatActivity{
                 // ...
             }
         };
+
+
         dbEvent.addListenerForSingleValueEvent(postListener);
 
-
     }
+
+
+    private void setJoinButtonText()
+    {
+        if (joined) btnJoin.setText("Leave Event");
+        else btnJoin.setText("Join");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        savedInstanceState.putParcelable(StaticConstants.USER_KEY,user);
+        savedInstanceState.putParcelable(StaticConstants.EVENT_KEY, event);
+        savedInstanceState.putString(StaticConstants.EID_KEY,event.getFirebaseId());
+    }
+
+
+    @Override
+    protected void onDestroy()
+    {
+
+        Log.d(StaticConstants.TAG, "onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop()
+    {
+
+        Log.d(StaticConstants.TAG, "onStop");
+
+        super.onStop();
+    }
+
 }

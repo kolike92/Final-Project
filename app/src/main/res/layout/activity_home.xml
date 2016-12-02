@@ -31,9 +31,9 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="335dp"
+        android:layout_height="179dp"
         android:id="@+id/lvActivities"
-        android:layout_weight="1.29" />
+        android:layout_weight="0.92" />
 
     <Button
         android:layout_width="match_parent"

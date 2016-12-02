@@ -126,6 +126,7 @@ public class BuddyUser implements Parcelable {
         in.readStringList(eids);
         in.readStringList(likes);
         fbId = in.readString();
+        firebaseId = in.readString();
 
 
     }
@@ -143,6 +144,7 @@ public class BuddyUser implements Parcelable {
         dest.writeStringList(eids);
         dest.writeStringList(likes);
         dest.writeString(fbId);
+        dest.writeString(firebaseId);
     }
 
     public String getFbId() {
@@ -159,7 +161,13 @@ public class BuddyUser implements Parcelable {
         {
             eids = new ArrayList<String>();
         }
-        eids.add(eid);
+        boolean exists = false;
+        //arraylist.contains() doesn't seem to work here
+        for(int i = 0; i < eids.size(); i++)
+        {
+            if(eids.get(i).equals(eid)) exists = true;
+        }
+        if(!exists) eids.add(eid);
     }
 
     public void removeEvent(String eid)
@@ -168,7 +176,12 @@ public class BuddyUser implements Parcelable {
         {
             eids = new ArrayList<String>();
         }
-        eids.remove(eid);
+        int i = -1;
+        for(int j = 0; j < eids.size(); j++)
+        {
+            if(eids.get(j).equals(eid)) i = j;
+        }
+        if(i > -1) eids.remove(i);
     }
 
 
@@ -179,4 +192,5 @@ public class BuddyUser implements Parcelable {
     public void setFirebaseId(String firebaseId) {
         this.firebaseId = firebaseId;
     }
+
 }

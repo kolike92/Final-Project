@@ -121,6 +121,7 @@ public class CreateEventActivity extends AppCompatActivity
                 Intent intent = new Intent(getBaseContext(), EventDetail.class);
                 Bundle b = new Bundle();
                 b.putParcelable(StaticConstants.EVENT_KEY, e);
+                b.putString(StaticConstants.EID_KEY, e.getFirebaseId());
                 b.putParcelable(StaticConstants.USER_KEY, user);
                 intent.putExtras(b);
                 startActivity(intent);

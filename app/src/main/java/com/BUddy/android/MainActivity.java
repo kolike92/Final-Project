@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private GoogleApiClient mGoogleApiClient;
-    private Button btnBULogin;
+    private Button btnBULogin, btnFakeSignIn;
     private static final int RC_SIGN_IN = 9001;
     private static final int FB_SIGN_IN = 9002;
     private TextView tvError;
@@ -58,7 +58,13 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     //test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null)
+        {
+            email = savedInstanceState.getString(StaticConstants.EMAIL_KEY);
+            user = (BuddyUser) savedInstanceState.getParcelable(StaticConstants.USER_KEY);
+        }
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
@@ -84,6 +90,70 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         loginButton = (LoginButton) findViewById((R.id.login_button));
         loginButton.setReadPermissions("email");
         btnBULogin = (Button) findViewById(R.id.btnLogin);
+        btnFakeSignIn = (Button) findViewById(R.id.btnFakeSignIn);
+        btnFakeSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                email = "fakeemail@bu.edu";
+                user = new BuddyUser();
+                user.setEmail(email);
+                Query q = dbRef.orderByChild("email").equalTo(email);
+                q.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(!dataSnapshot.exists())
+                        {
+                            user = new BuddyUser();
+                            user.setEmail(email);
+                            DatabaseReference eventRef = dbRef.push();
+                            user.setFirebaseId(eventRef.getKey());
+                            //add new user to db
+                            eventRef.setValue(user);
+                            Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                            home.putExtra(StaticConstants.USER_KEY,user);
+                            home.putExtra("something","else");
+
+
+                            startActivity(home);
+                        }
+                        else
+                        {
+                            Iterable<DataSnapshot> childSnap = dataSnapshot.getChildren();
+                            for(DataSnapshot d: childSnap) { //there should only be one...
+                                user = d.getValue(BuddyUser.class);
+                                if(user.getFirebaseId() == null || user.getFirebaseId().equals(""))
+                                {
+                                    user.setFirebaseId(d.getKey());
+
+                                    DatabaseReference userRef = dbRef.child(d.getKey());
+                                    userRef.setValue(user, new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                            Log.d(StaticConstants.TAG, "sup");
+                                        }
+                                    });
+                                    Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                                    home.putExtra(StaticConstants.USER_KEY,user);
+                                    home.putExtra("something","else");
+
+
+                                    startActivity(home);
+                                }
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        tvError.setText(getString(R.string.unknownSignInError));
+                    }
+                });
+
+            }
+        });
+
         tvError = (TextView) findViewById(R.id.tvError);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -123,10 +193,26 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                                     LoginManager.getInstance().logOut();
                                 }
                                 else {
-                                    user = dataSnapshot.getValue(BuddyUser.class);
+                                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                                    for(DataSnapshot d : children) {
+                                        //this should really only be called once
+                                        user = d.getValue(BuddyUser.class);
+                                        if(user.getFirebaseId() == null || user.getFirebaseId().equals(""))
+                                        {
+                                            user.setFirebaseId(d.getKey());
+                                            DatabaseReference userRef = dbRef.child(d.getKey());
+                                            userRef.setValue(user, new DatabaseReference.CompletionListener() {
+                                                @Override
+                                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                                    Log.d(StaticConstants.TAG, "sup");
+                                                }
+                                            });
+
+                                        }
+                                    }
                                     Intent home = new Intent(getBaseContext(), HomeActivity.class);
                                     Bundle b = new Bundle();
-                                    b.putParcelable("user",user);
+                                    b.putParcelable(StaticConstants.USER_KEY,user);
 
                                     home.putExtras(b);
                                     startActivity(home);
@@ -194,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 return;
             }
             Query q = dbRef.orderByChild("email").equalTo(email);
-            q.addListenerForSingleValueEvent(new ValueEventListener() {
+            q.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.exists())
@@ -202,22 +288,45 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                         user = new BuddyUser();
                         user.setEmail(email);
                         DatabaseReference eventRef = dbRef.push();
+                        user.setFirebaseId(eventRef.getKey());
                         //add new user to db
                         eventRef.setValue(user);
+                        Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                        home.putExtra(StaticConstants.USER_KEY,user);
+                        home.putExtra("something","else");
+                        startActivity(home);
                     }
                     else
                     {
                         Iterable<DataSnapshot> childSnap = dataSnapshot.getChildren();
                         for(DataSnapshot d: childSnap) { //there should only be one...
                             user = d.getValue(BuddyUser.class);
-                        }
-                    }
-                    Intent home = new Intent(getBaseContext(), HomeActivity.class);
-                    Bundle b = new Bundle();
-                    b.putParcelable("user",user);
+                            if(user.getFirebaseId() == null || user.getFirebaseId().equals(""))
+                            {
+                                user.setFirebaseId(d.getKey());
+                                DatabaseReference userRef = dbRef.child(d.getKey());
+                                userRef.setValue(user, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                        Log.d(StaticConstants.TAG, "sup");
+                                    }
+                                });
 
-                    home.putExtras(b);
-                    startActivity(home);
+                            }
+
+                        }
+                        Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                        home.putExtra(StaticConstants.USER_KEY,user);
+                        home.putExtra("something","else");
+
+
+                        startActivity(home);
+
+                    }
+
+
+
+
                 }
 
                 @Override
@@ -232,6 +341,13 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         tvError.setText(getString(R.string.unknownSignInError));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        savedInstanceState.putString(StaticConstants.EMAIL_KEY,email);
+        savedInstanceState.putParcelable(StaticConstants.USER_KEY,user);
     }
 }
 

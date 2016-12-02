@@ -19,12 +19,13 @@
             android:id="@+id/tvTitle"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/tvTitleSet" />
+            android:id="@+id/tvTitleSet"
+            android:background="@android:color/transparent" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,12 +43,13 @@
             android:id="@+id/tvnumpeople"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/tvnumpeopleset" />
+            android:id="@+id/tvnumpeopleset"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 
 
@@ -65,12 +67,13 @@
             android:layout_weight="1"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/tvDateSet"/>
+            android:id="@+id/tvDateSet"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 
 
@@ -88,12 +91,13 @@
             android:layout_weight="1"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvLocationSet"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@android:color/transparent"/>
 
     </LinearLayout>
 
@@ -113,12 +117,13 @@
             android:layout_weight="1"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/tvDetailsSet"/>
+            android:id="@+id/tvDetailsSet"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 
     <LinearLayout
