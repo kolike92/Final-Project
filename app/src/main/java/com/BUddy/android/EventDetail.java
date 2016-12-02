@@ -2,12 +2,11 @@ package com.BUddy.android;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-//<<<<<<< HEAD
-//=======
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
-//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -23,12 +22,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-//<<<<<<< HEAD
+
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-//=======
+
 import com.google.firebase.database.Query;
-//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
+
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class EventDetail extends InnerActivity{
     private Button btnJoin;
     private BUEvent event;
     private BuddyUser user;
-//<<<<<<< HEAD
+
     private String eventId;
 
 
@@ -70,24 +69,24 @@ public class EventDetail extends InnerActivity{
 
 
 
-//=======
+
     private  Button btnMap;
     private String creatorPhoneNo;
     private String creatorString;
     FirebaseDatabase firebaseDatabase;
 
     private BuddyUser creator;
-//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
 
-     //   joinListener = new JoinListener();
+
 
         Bundle b = getIntent().getExtras();
-//<<<<<<< HEAD
+
 
         //if this was called from saveInstanceState, get the info from there
         if(savedInstanceState != null)
@@ -105,10 +104,7 @@ public class EventDetail extends InnerActivity{
         }
 
 
-//=======
 
-        //String  event_id = "-KVkHLDRUTMAOxF_XmfU";
-//>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
         dbEvent = db.getReference("events/" + eventId);
         dbUser = db.getReference("users/" + user.getFirebaseId());
@@ -136,6 +132,7 @@ public class EventDetail extends InnerActivity{
             @Override
             public void onClick(View v) {
 
+
                 if(creatorPhoneNo != null && !creatorPhoneNo.equals("")) {
 
                     String message = "Say Hello";
@@ -156,6 +153,7 @@ public class EventDetail extends InnerActivity{
                 {
 
                 }
+
             }
         });
 
@@ -163,11 +161,18 @@ public class EventDetail extends InnerActivity{
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String intentData = tvLocationSet.getText().toString();;  //refers to the textbox at the top, [optional] fill in with a string if you want to pass to the next activity.
-                Uri gmmIntentUri = Uri.parse("geo:42.35,-71.11?q="+intentData);
-                Intent NextScreen = new Intent(Intent.ACTION_VIEW, gmmIntentUri);  //this is another way of identifying your destination class, Intent constructor is overloaded to also take string.
-                NextScreen.putExtra("GeneralIntentData", intentData);
-                startActivity(NextScreen);
+                String intentData = tvLocationSet.getText().toString();;
+                Uri gmmIntentUri = Uri.parse("geo:42.35,-71.11?q="+intentData);     //The  geo:42.35,-71.11 will ensure the search is around BU campus
+                Intent NextScreen = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                //NextScreen.setPackage("com.google.android.apps.maps");
+                //Package: Calling setPackage("com.google.android.apps.maps") will ensure that the Google Maps app for Android handles the Intent.
+                //If the package isn't set, the system will determine which apps can handle the Intent. If multiple apps are available, the user may be asked which app they would like to use.
+
+                //To verify that an app is available to receive the intent, call resolveActivity() on your Intent object. If the result is non-null, there is at least one app that can handle the intent
+                // and it's safe to call startActivity(). If the result is null, you should not use the intent and, if possible, you should disable the feature that invokes the intent.
+                if (NextScreen.resolveActivity(getPackageManager()) != null) {
+                    startActivity(NextScreen);
+                }
             }
 
         });
@@ -257,7 +262,7 @@ public class EventDetail extends InnerActivity{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-//<<<<<<< HEAD
+
                 if(dataSnapshot.exists()) {
                     event = dataSnapshot.getValue(BUEvent.class);
                     tvTitleSet.setText(event.getEventTitle());
@@ -297,7 +302,7 @@ public class EventDetail extends InnerActivity{
                         }
                     }
                 }
-//=======
+
                 event = dataSnapshot.getValue(BUEvent.class);
                 tvTitleSet.setText(event.getEventTitle());
                 //tvDateSet.setText(event.getEventDate().toString());

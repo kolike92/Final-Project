@@ -29,5 +29,7 @@
     <string name="errorNotBU">Please log in with your BU email</string>
     <string name="unknownSignInError">An error occurred on log in. Please try again.</string>
     <string name="noFacebook">Facebook user not recognized. Please log in with your Kerberos account and enable Facebook login</string>
+    <string name="where"> Where? </string>
+
 </resources>
 
