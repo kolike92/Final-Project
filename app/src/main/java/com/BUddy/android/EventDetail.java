@@ -143,6 +143,17 @@ public class EventDetail extends InnerActivity{
             }
         });
 
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String intentData = tvLocationSet.getText().toString();;  //refers to the textbox at the top, [optional] fill in with a string if you want to pass to the next activity.
+                Intent NextScreen = new Intent(Intent.ACTION_VIEW);  //this is another way of identifying your destination class, Intent constructor is overloaded to also take string.
+                NextScreen.putExtra("GeneralIntentData", intentData);
+                startActivity(NextScreen);
+            }
+
+        });
+
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
