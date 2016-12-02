@@ -5,8 +5,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -164,7 +164,7 @@ public class SearchFragment extends DialogFragment {
             listener = (DialogListener) activity;
         } else {
             throw new ClassCastException(activity.toString()
-                    + " must implement ButtonFragment.OnClickListener");
+                    + " must implement DialogListener");
         }
     }
 

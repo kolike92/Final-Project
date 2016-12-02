@@ -1,5 +1,7 @@
 package com.BUddy.android;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,7 +44,7 @@ import java.util.ArrayList;
  * Created by Sophia_ on 10/31/16.
  */
 
-public class HomeActivity extends InnerActivity {
+public class HomeActivity extends InnerActivity implements SearchFragment.DialogListener {
     private ImageButton ibtnProfile;
     private ListView lvActivities;
     private Button btnFilter;
@@ -55,7 +57,39 @@ public class HomeActivity extends InnerActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference dbRef;
 
+    private FragmentManager fragMan;
 
+    @Override
+protected void onResume()
+{
+    super.onResume();
+   //reload activities in case any were added
+    events.clear();
+    long now = System.currentTimeMillis();
+    Query q = firebaseDatabase.getReference("events").orderByChild("eventDate/time").startAt(now);
+    q.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+        @Override
+        public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists())
+            {
+                Iterable<com.google.firebase.database.DataSnapshot> children = dataSnapshot.getChildren();
+                for(com.google.firebase.database.DataSnapshot d: children)
+                {
+                    BUEvent eAdd = d.getValue(BUEvent.class);
+                    events.add(eAdd);
+                }
+
+                lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase);
+                lvActivities.setAdapter(lvAdapater);
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    });
+}
 
 
     @Override
@@ -70,6 +104,7 @@ public class HomeActivity extends InnerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        fragMan = getFragmentManager();
 
         events = new ArrayList<BUEvent>();
         ibtnProfile = (ImageButton) findViewById(R.id.ibtnProfile);
@@ -111,7 +146,16 @@ public class HomeActivity extends InnerActivity {
         });
         Firebase ref = new Firebase("https://buddy-a4223.firebaseio.com/");
 
+        btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchFragment f = new SearchFragment();
+                FragmentTransaction ft = fragMan.beginTransaction();
+                f.show(fragMan,"");
 
+
+            }
+        });
 
         lvActivities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -151,15 +195,13 @@ public class HomeActivity extends InnerActivity {
         });
 
 
-
-
-
-
-
     }
 
 
+    @Override
+    public void onFinishEditDialog(ArrayList<BUEvent> eventList) {
 
+    }
 }
 
 class EventListAdapter extends BaseAdapter {

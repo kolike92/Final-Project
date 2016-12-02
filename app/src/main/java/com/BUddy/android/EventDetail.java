@@ -1,5 +1,6 @@
 package com.BUddy.android;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 //<<<<<<< HEAD
 //=======
@@ -9,6 +10,8 @@ import android.net.Uri;
 //>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -92,6 +95,7 @@ public class EventDetail extends InnerActivity{
             user = savedInstanceState.getParcelable(StaticConstants.USER_KEY);
             event = savedInstanceState.getParcelable(StaticConstants.EVENT_KEY);
             eventId = savedInstanceState.getString(StaticConstants.EID_KEY);
+            joined = savedInstanceState.getBoolean("JOINED");
         }
         else if (b != null && (user == null || event == null)) //if we have a bundle and we don't already have the info we need
         {
@@ -127,21 +131,34 @@ public class EventDetail extends InnerActivity{
         btnMap = (Button) findViewById(R.id.btnMap);
 
 
+
         btnMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                if(creatorPhoneNo != null && !creatorPhoneNo.equals("")) {
 
+                    String message = "Say Hello";
 
-                String message = "Say Hello";
+                    Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                    sendIntent.putExtra("sms_body", message);
+                    sendIntent.putExtra("address", creatorPhoneNo);
+                    sendIntent.setType("vnd.android-dir/mms-sms");
+                    try {
+                        startActivity(sendIntent);
+                    }
+                    catch(ActivityNotFoundException ane)
+                    {
+                        Toast.makeText(getApplicationContext(),"Unable to find texting activity.",Toast.LENGTH_LONG).show();
+                    }
+                }
+                else
+                {
 
-                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                sendIntent.putExtra("sms_body", message);
-                sendIntent.putExtra("address", creatorPhoneNo);
-                sendIntent.setType("vnd.android-dir/mms-sms");
-                startActivity(sendIntent);
+                }
             }
         });
+
 
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,7 +275,14 @@ public class EventDetail extends InnerActivity{
                     if (event.getCreator() != null && event.getCreator().equals(user.getFirebaseId())) {
                         isOwner = true;
                         btnJoin.setText("Cancel Event");
-
+                        tvTitleSet.setEnabled(true);
+                        tvTitleSet.addTextChangedListener(new ChangeEventListener("eventTitle"));
+                        tvDetailsSet.setEnabled(true);
+                        tvDetailsSet.addTextChangedListener(new ChangeEventListener("eventDetails"));
+                        tvDateSet.setEnabled(true);
+                        tvDateSet.addTextChangedListener(new ChangeEventListener("eventDate"));
+                        tvLocationSet.setEnabled(true);
+                        tvLocationSet.addTextChangedListener(new ChangeEventListener("eventLocation"));
 
                     } else {
                         tvTitleSet.setEnabled(false);
@@ -288,8 +312,17 @@ public class EventDetail extends InnerActivity{
                         // Get Post object and use the values to update the UI
                         creator = dataSnapshot.getValue(BuddyUser.class);
                         creatorPhoneNo = creator.getPhoneNum();
+                        if(creatorPhoneNo == null || creatorPhoneNo.equals(""))
+                        {
+                            btnMessage.setClickable(false);
+                            btnMessage.setText("No phone number available");
+                        }
+                        else
+                        {
+                            btnMessage.setClickable(true);
+                            btnMessage.setText(getString(R.string.message));
+                        }
 
-                        // ...
                     }
 
                     @Override
@@ -330,6 +363,7 @@ public class EventDetail extends InnerActivity{
         savedInstanceState.putParcelable(StaticConstants.USER_KEY,user);
         savedInstanceState.putParcelable(StaticConstants.EVENT_KEY, event);
         savedInstanceState.putString(StaticConstants.EID_KEY,event.getFirebaseId());
+        savedInstanceState.putBoolean("JOINED",joined);
     }
 
 
@@ -355,5 +389,36 @@ public class EventDetail extends InnerActivity{
 
         super.onStop();
     }
+
+    private class ChangeEventListener implements TextWatcher
+    {
+        String child;
+
+
+        public ChangeEventListener(String sChild)
+        {
+            child = sChild;
+
+        }
+
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String newVal = s.toString();
+            DatabaseReference thisRef = dbEvent.child(child);
+            thisRef.setValue(newVal);
+        }
+    }
+
 
 }

@@ -221,7 +221,8 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                tvError.setText(getString(R.string.unknownSignInError));
+
+                                tvError.setText(getString(R.string.unknownSignInError) + databaseError.getMessage());
                             }
                         });
                     }
@@ -233,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
                     @Override
                     public void onError(FacebookException exception) {
-                        tvError.setText(getString(R.string.unknownSignInError));
+                        tvError.setText(getString(R.string.unknownSignInError) + exception.getMessage());
                     }
                 });
 
