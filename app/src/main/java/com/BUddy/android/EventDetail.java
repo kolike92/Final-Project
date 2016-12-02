@@ -124,7 +124,7 @@ public class EventDetail extends InnerActivity{
         tvCreatedBy = (TextView) findViewById(R.id.tvCreatedBy);
         btnMessage = (Button) findViewById(R.id.btnMessage);
         btnJoin = (Button) findViewById(R.id.btnJoin);
-
+        btnMap = (Button) findViewById(R.id.btnMap);
 
 
         btnMessage.setOnClickListener(new View.OnClickListener() {
