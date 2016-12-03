@@ -37,12 +37,14 @@ public class SearchFragment extends DialogFragment {
     private CheckBox cbFood, cbSports, cbStudyBreak, cbMovie, cbExploring, cbOther;
     private ArrayList<CheckBox> boxes;
     private EditText etSearch;
-    private Button btnSearch;
+    private Button btnSearch, btnCancel;
     private ArrayList<BUEvent> events;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference dbRef;
     private DialogListener listener;
     private ArrayList<Integer> qids;
+
+
 
 
     static SearchFragment newInstance() {
@@ -87,6 +89,7 @@ public class SearchFragment extends DialogFragment {
 
         etSearch = (EditText) v.findViewById(R.id.etSearch);
         btnSearch = (Button) v.findViewById(R.id.btnSearch);
+        btnCancel = (Button) v.findViewById(R.id.btnCancel);
 
         events = new ArrayList<BUEvent>();
 
@@ -94,6 +97,13 @@ public class SearchFragment extends DialogFragment {
         dbRef = firebaseDatabase.getReference("events");
 
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onFinishEditDialog(null,true);
+                dismiss();
+            }
+        });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
                                          @Override
@@ -129,7 +139,7 @@ public class SearchFragment extends DialogFragment {
                                                              }
                                                          }
                                                      }
-                                                     listener.onFinishEditDialog(events);
+                                                     listener.onFinishEditDialog(events,false);
                                                      dismiss();
                                                  }
 
@@ -155,7 +165,7 @@ public class SearchFragment extends DialogFragment {
         return v;
     }
     public interface DialogListener {
-        void onFinishEditDialog(ArrayList<BUEvent> eventList);
+        void onFinishEditDialog(ArrayList<BUEvent> eventList, boolean cancel);
     }
 
     public void onAttach (Activity activity) {

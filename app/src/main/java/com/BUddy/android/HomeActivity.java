@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -47,48 +48,38 @@ import java.util.ArrayList;
 public class HomeActivity extends InnerActivity implements SearchFragment.DialogListener {
     private ImageButton ibtnProfile;
     private ListView lvActivities;
-    private Button btnFilter;
+    private Button btnFilter, btnClearFilters;
     private Button btnCreatePost;
-    private TextView tvDate;
+
+
+    private boolean isFiltered;
 
     ListAdapter lvAdapater;
 
-    private ArrayList<BUEvent> events;
+    private ArrayList<BUEvent> events, filteredEvents;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference dbRef;
 
     private FragmentManager fragMan;
 
     @Override
-protected void onResume()
+protected void onRestoreInstanceState(Bundle savedInstanceState)
 {
-    super.onResume();
+    super.onRestoreInstanceState(savedInstanceState);
    //reload activities in case any were added
-    events.clear();
-    long now = System.currentTimeMillis();
-    Query q = firebaseDatabase.getReference("events").orderByChild("eventDate/time").startAt(now);
-    q.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
-        @Override
-        public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-            if(dataSnapshot.exists())
-            {
-                Iterable<com.google.firebase.database.DataSnapshot> children = dataSnapshot.getChildren();
-                for(com.google.firebase.database.DataSnapshot d: children)
-                {
-                    BUEvent eAdd = d.getValue(BUEvent.class);
-                    events.add(eAdd);
-                }
+    isFiltered = savedInstanceState.getBoolean(StaticConstants.FILTERED_KEY);
 
-                lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase);
-                lvActivities.setAdapter(lvAdapater);
-            }
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    });
+    if(!isFiltered) {
+        events.clear();
+        long now = System.currentTimeMillis();
+        showAllEvents();
+    }
+    else
+    {
+        filteredEvents = savedInstanceState.getParcelableArrayList(StaticConstants.FILTERED_EVENTS_KEY);
+        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+        lvActivities.setAdapter(lvAdapater);
+    }
 }
 
 
@@ -104,6 +95,13 @@ protected void onResume()
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        isFiltered = false;
+        if(savedInstanceState != null)
+        {
+            isFiltered = savedInstanceState.getBoolean(StaticConstants.FILTERED_KEY);
+            filteredEvents = savedInstanceState.getParcelableArrayList(StaticConstants.FILTERED_EVENTS_KEY);
+        }
+
         fragMan = getFragmentManager();
 
         events = new ArrayList<BUEvent>();
@@ -112,48 +110,36 @@ protected void onResume()
         btnFilter = (Button) findViewById(R.id.btnFilter);
         btnCreatePost = (Button) findViewById(R.id.btnCreatePost);
         Bundle b = getIntent().getExtras();
-        tvDate = (TextView) findViewById(R.id.tvDate);
+        btnClearFilters = (Button) findViewById(R.id.btnClearFilters);
         user = getIntent().getExtras().getParcelable(StaticConstants.USER_KEY);
-        String s = getIntent().getExtras().getString("something");
+
         Firebase.setAndroidContext(this);
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        long now = System.currentTimeMillis();
-        dbRef = firebaseDatabase.getReference("events");
-        Query q = firebaseDatabase.getReference("events").orderByChild("eventDate/time").startAt(now);
-        q.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+
+        if(!isFiltered) showAllEvents();
+        else
+        {
+            lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+            lvActivities.setAdapter(lvAdapater);
+        }
+
+        btnClearFilters.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists())
-                {
-                    Iterable<com.google.firebase.database.DataSnapshot> children = dataSnapshot.getChildren();
-                    for(com.google.firebase.database.DataSnapshot d: children)
-                    {
-                        BUEvent eAdd = d.getValue(BUEvent.class);
-                        events.add(eAdd);
-                    }
-
-                    lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase);
-                    lvActivities.setAdapter(lvAdapater);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onClick(View v) {
+                isFiltered = false;
+                showAllEvents();
             }
         });
-        Firebase ref = new Firebase("https://buddy-a4223.firebaseio.com/");
+
 
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SearchFragment f = new SearchFragment();
                 FragmentTransaction ft = fragMan.beginTransaction();
-                f.show(fragMan,"");
-
-
+                f.show(fragMan,"Search events");
             }
         });
 
@@ -197,17 +183,60 @@ protected void onResume()
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle saveInstanceState)
+    {
+        super.onSaveInstanceState(saveInstanceState);
+        saveInstanceState.putParcelableArrayList(StaticConstants.FILTERED_EVENTS_KEY, filteredEvents);
+        saveInstanceState.putBoolean(StaticConstants.FILTERED_KEY, isFiltered);
+    }
+
 
     @Override
-    public void onFinishEditDialog(ArrayList<BUEvent> eventList) {
+    public void onFinishEditDialog(ArrayList<BUEvent> eventList, boolean cancel) {
+        if(cancel) return; //do nothing
+        filteredEvents = eventList;
+        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+        lvActivities.setAdapter(lvAdapater);
+        isFiltered = true;
+        if(filteredEvents.size() == 0) Toast.makeText(getBaseContext(),
+                "No results found", Toast.LENGTH_LONG).show();
+
 
     }
+
+    private void showAllEvents()
+    {
+        long now = System.currentTimeMillis();
+        dbRef = firebaseDatabase.getReference("events");
+        Query q = firebaseDatabase.getReference("events").orderByChild("eventDate/time").startAt(now);
+        q.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    Iterable<com.google.firebase.database.DataSnapshot> children = dataSnapshot.getChildren();
+                    for(com.google.firebase.database.DataSnapshot d: children)
+                    {
+                        BUEvent eAdd = d.getValue(BUEvent.class);
+                        events.add(eAdd);
+                    }
+
+                    lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase);
+                    lvActivities.setAdapter(lvAdapater);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }
 
 class EventListAdapter extends BaseAdapter {
-
-
-
     private ArrayList<BUEvent> buEvents;
     private FirebaseDatabase firebaseDatabase;
 
