@@ -1,6 +1,8 @@
 package com.BUddy.android;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -141,12 +143,26 @@ public class CreateEventActivity extends AppCompatActivity
         etTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentTransaction ft = fragMan.beginTransaction();
+                Fragment prev = fragMan.findFragmentByTag("Choose Time");
+                if(prev != null)
+                {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
                 tpdTime.show(fragMan,"Choose Time");
             }
         });
         etDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentTransaction ft = fragMan.beginTransaction();
+                Fragment prev = fragMan.findFragmentByTag("Choose Date");
+                if(prev != null)
+                {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
                 dpdDate.show(fragMan,"Choose Date");
             }
         });
