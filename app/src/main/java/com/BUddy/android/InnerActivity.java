@@ -10,6 +10,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.firebase.database.DatabaseReference;
@@ -66,6 +67,12 @@ public abstract class InnerActivity extends AppCompatActivity {
         {
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
         }
+        if(id == R.id.homeButton) {
+            //if (getApplicationContext())
+            Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+            home.putExtra(StaticConstants.USER_KEY, user);
+            startActivity(home);
+        }
         return false;
     }
 
@@ -78,3 +85,4 @@ public abstract class InnerActivity extends AppCompatActivity {
 
 
 }
+
