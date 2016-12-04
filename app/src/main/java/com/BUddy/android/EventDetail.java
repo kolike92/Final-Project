@@ -56,6 +56,7 @@ public class EventDetail extends InnerActivity{
     private Button btnJoin;
     private BUEvent event;
     private BuddyUser user;
+    private EditText tvnumpeopleSet;
 
     private String eventId;
 
@@ -125,6 +126,7 @@ public class EventDetail extends InnerActivity{
         btnMessage = (Button) findViewById(R.id.btnMessage);
         btnJoin = (Button) findViewById(R.id.btnJoin);
         btnMap = (Button) findViewById(R.id.btnMap);
+        tvnumpeopleSet = (EditText) findViewById(R.id.tvnumpeopleset);
 
 
 
@@ -275,6 +277,9 @@ public class EventDetail extends InnerActivity{
 
 
                     tvLocationSet.setText(event.getLocation());
+                    String s = String.valueOf(event.getMaxParticipants());
+                    String s2 = String.valueOf(event.getParticipants().size());
+                    tvnumpeopleSet.setText(s2+"/"+s);
                     tvCategories.setText(EventCategory.getById(event.getCategory()).getName());
                     tvDetailsSet.setText(event.getEventDetails());
                     if (event.getCreator() != null && event.getCreator().equals(user.getFirebaseId())) {
