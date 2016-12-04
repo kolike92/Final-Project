@@ -164,12 +164,10 @@ public class BuddyUser implements Parcelable {
         {
             eids = new ArrayList<String>();
         }
-        int i = -1;
-        for(int j = 0; j < eids.size(); j++)
+        while(eids.remove(eid))
         {
-            if(eids.get(j).equals(eid)) i = j;
+            continue;
         }
-        if(i > -1) eids.remove(i);
     }
 
 

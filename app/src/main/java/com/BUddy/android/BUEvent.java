@@ -183,13 +183,10 @@ public class BUEvent implements Parcelable{
     public void removeParticipant(String uid)
     {
         if (participants == null) participants = new ArrayList<String>();
-        int i = -1;
-        for(int j = 0; j < participants.size(); j++)
+        while(participants.remove(uid))
         {
-            if(participants.get(j).equals(uid)) i = j;
+            continue;
         }
-        if(i > -1) participants.remove(i);
-
     }
 
 
