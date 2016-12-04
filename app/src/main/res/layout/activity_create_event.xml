@@ -14,7 +14,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:weightSum="2">
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,7 +23,7 @@
             android:text="@string/title"
             android:id="@+id/tvTitle"
             android:textSize="25dp"
-            android:layout_weight="1" />
+            android:layout_weight="0.14" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
             android:id="@+id/tvnumber"
             android:text="@string/numberpeople"
             android:textSize="25dp"
-            android:layout_weight="1" />
+            android:layout_weight="0.16" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -66,7 +67,7 @@
             android:id="@+id/tvLocation"
             android:textSize="25dp"
             android:layout_alignParentStart="true"
-            android:layout_weight="1" />
+            android:layout_weight="0.17" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -88,16 +89,21 @@
             android:text="Date"
             android:id="@+id/tvDate"
             android:textSize="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_weight="1" />
+            android:layout_alignParentStart="true" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="174dp"
             android:layout_height="wrap_content"
             android:inputType="date"
             android:ems="10"
-            android:id="@+id/etDate"
-            android:layout_weight="1" />
+            android:id="@+id/etDate" />
+
+        <TextView
+            android:text="@string/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTime"
+            android:textSize="25sp" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -122,7 +128,7 @@
             android:id="@+id/textView5"
             android:textSize="25dp"
             android:layout_alignParentStart="true"
-            android:layout_weight="1" />
+            android:layout_weight="0.08" />
 
         <Spinner
             android:layout_width="wrap_content"
@@ -139,7 +145,9 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_gravity="top"
+        android:gravity="top">
 
         <TextView
             android:layout_width="wrap_content"
@@ -147,9 +155,9 @@
             android:text="@string/detail"
             android:id="@+id/tvDetails"
             android:textSize="25dp"
-            android:layout_marginTop="41dp"
             android:layout_weight="1"
-            android:layout_gravity="top" />
+            android:layout_gravity="top"
+            android:gravity="top" />
 
         <EditText
             android:layout_width="wrap_content"
