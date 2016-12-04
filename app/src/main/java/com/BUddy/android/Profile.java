@@ -26,6 +26,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -59,7 +60,6 @@ public class Profile extends AppCompatActivity {
     private ArrayList<BUEvent> yourEvents;
     private ArrayList<BUEvent> joinedEvents;
 
-    private String[] eids_list;
 
 
     private BuddyUser user;
@@ -132,86 +132,47 @@ public class Profile extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-         /*
-         * get user ownes event ids from user db through eids
-         */
 
-
-        dbUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child:dataSnapshot.getChildren()) {
-                    if (child.getKey().toString().equals(user.getFirebaseId())) {
-                        Log.d("user data",child.toString());
-                        Log.d("user", child.child("eids").getValue().toString());
-                        String eids = child.child("eids").getValue().toString();
-                        eids = eids.substring(1,(eids.length()-1));
-                        eids_list = eids.split(",");
-                        Log.d("eventid list", eids_list[0]);
-                        break;
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        /*
-         * get event the user participated events from event db
-         *
-         */
         dbEvent.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child:dataSnapshot.getChildren()) {
-                    try {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                         /*
                          * add event to owned event list if event key is in the eids list
                          */
-
-                        for (int i = 0; i < eids_list.length; i++) {
-
-                            if (child.getKey().toString().equals(eids_list[i])) {
-                                BUEvent eAdd = child.getValue(BUEvent.class);
-                                yourEvents.add(eAdd);
-                                break;
-                            }
-                        }
+                    if (child.child("creator").getValue().toString().equals(user.getFirebaseId())) {
+                        BUEvent eAdd = child.getValue(BUEvent.class);
+                        yourEvents.add(eAdd);
+                    }
 
                         /*
                          * find participate events
                          */
+
+                    if (child.child("participants").exists()) {
                         String p = child.child("participants").getValue().toString();
-                        p=p.substring(1,(p.length()-1));
-
+                        Log.d("participants",p);
+                        p = p.substring(1,(p.length()-1));
                         String[] participants_list = p.split(",");
-                        for (int i = 0; i < participants_list.length; i++) {
-                            try {
-                                if (child.getKey().toString().equals(participants_list[i])) {
-                                    BUEvent eAdd = child.getValue(BUEvent.class);
-                                    joinedEvents.add(eAdd);
-                                    break;
-                                }
-                            }
-                            catch (NullPointerException e) {
-                                break;
-                            }
-
+                        Log.d("participants 0", participants_list[0]);
+                        if (Arrays.asList(participants_list).contains(user.getFirebaseId())) {
+                            BUEvent eAdd = child.getValue(BUEvent.class);
+                            joinedEvents.add(eAdd);
+                            Log.d("check joined events", eAdd.toString());
                         }
                     }
-                    catch (Exception e) {}
+
+
 
                 }
             }
 
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled (DatabaseError databaseError){
 
             }
+
         });
 
         try {
@@ -227,8 +188,7 @@ public class Profile extends AppCompatActivity {
 
             }
         } catch (NullPointerException e) {}
-
-                /*
+        /*
          *
          *
          *
@@ -305,7 +265,9 @@ public class Profile extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Query q = dbUser.orderByChild("email").equalTo(user.getEmail());
+
+                Query q = dbUser.orderByKey().equalTo(user.getFirebaseId());
+                Log.d("user email", user.getEmail());
                 q.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -319,19 +281,18 @@ public class Profile extends AppCompatActivity {
                             user.setPhoneNum(etName.getText().toString());
                             dbUser.child(user.getFirebaseId()).child("phoneNum").setValue(etPhoneNum.getText().toString());
                             dbUser.child(user.getFirebaseId()).child("dob").setValue(etDoB.getText().toString());
+                            Toast.makeText(getApplicationContext(),"Your information has been saved.",Toast.LENGTH_SHORT).show();
                         }
 
 
-                        Toast.makeText(getApplicationContext(),"Your information has been saved.",Toast.LENGTH_SHORT);
+
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
-                // update to db
-                // Get a key for a user
-                Log.d("Save",dbUser.toString());
+
 
             }
         });
