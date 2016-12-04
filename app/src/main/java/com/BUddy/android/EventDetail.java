@@ -69,8 +69,6 @@ public class EventDetail extends InnerActivity{
     private boolean isOwner;
 
 
-
-
     private  Button btnMap;
     private String creatorPhoneNo;
     private String creatorString;
@@ -104,6 +102,10 @@ public class EventDetail extends InnerActivity{
             eventId =  b.getString(StaticConstants.EID_KEY);
         }
 
+        if(user.getEids().contains(eventId))
+        {
+            joined = true;
+        }
 
 
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -127,7 +129,7 @@ public class EventDetail extends InnerActivity{
         btnJoin = (Button) findViewById(R.id.btnJoin);
         btnMap = (Button) findViewById(R.id.btnMap);
         tvnumpeopleSet = (EditText) findViewById(R.id.tvnumpeopleset);
-
+        setJoinButtonText();
 
 
         btnMessage.setOnClickListener(new View.OnClickListener() {
@@ -375,6 +377,17 @@ public class EventDetail extends InnerActivity{
         savedInstanceState.putParcelable(StaticConstants.EVENT_KEY, event);
         savedInstanceState.putString(StaticConstants.EID_KEY,event.getFirebaseId());
         savedInstanceState.putBoolean("JOINED",joined);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        user = savedInstanceState.getParcelable(StaticConstants.USER_KEY);
+        event = savedInstanceState.getParcelable(StaticConstants.EVENT_KEY);
+        eventId = savedInstanceState.getString(StaticConstants.EID_KEY);
+        joined = savedInstanceState.getBoolean("JOINED");
+
+
     }
 
 
