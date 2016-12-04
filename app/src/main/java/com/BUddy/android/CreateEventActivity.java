@@ -150,7 +150,10 @@ public class CreateEventActivity extends AppCompatActivity
                     ft.remove(prev);
                 }
                 ft.addToBackStack(null);
-                tpdTime.show(fragMan,"Choose Time");
+                if(!tpdTime.isAdded()) {
+
+                    tpdTime.show(fragMan, "Choose Time");
+                }
             }
         });
         etDate.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +166,9 @@ public class CreateEventActivity extends AppCompatActivity
                     ft.remove(prev);
                 }
                 ft.addToBackStack(null);
-                dpdDate.show(fragMan,"Choose Date");
+                if(!dpdDate.isAdded()) {
+                    dpdDate.show(fragMan, "Choose Date");
+                }
             }
         });
 
