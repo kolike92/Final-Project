@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     private static final int RC_SIGN_IN = 9001;
     private static final int FB_SIGN_IN = 9002;
     private TextView tvError;
+    private ImageView logo;
 
     private String email;
     private BuddyUser user;
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         } catch (NoSuchAlgorithmException e) {
 
         }
+        logo = (ImageView) findViewById(R.id.logo);
+        logo.setImageResource(R.drawable.my_logo);
 
         callbackManager = CallbackManager.Factory.create();
 

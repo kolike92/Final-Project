@@ -50,7 +50,6 @@ public class Profile extends AppCompatActivity {
     private TextView tvYourAct;
     private ListView lvYourAct;
     private Button btnSave;
-    private Button btnHome;
     private ListAdapter upActAdapter;
     private ListAdapter pstActAdapter;
     private ListAdapter yourActAdapter;
@@ -101,7 +100,6 @@ public class Profile extends AppCompatActivity {
         tvYourAct = (TextView) findViewById(R.id.tvYourAct);
         lvYourAct = (ListView) findViewById(R.id.lvYourAct);
         btnSave = (Button) findViewById(R.id.btnSave);
-        btnHome = (Button) findViewById(R.id.btnHome);
 
         upEvents = new ArrayList<BUEvent>();
         yourEvents = new ArrayList<BUEvent>();
@@ -301,17 +299,7 @@ public class Profile extends AppCompatActivity {
 
 
 
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent home = new Intent(getBaseContext(), HomeActivity.class);
-                Bundle b = new Bundle();
-                b.putParcelable(StaticConstants.USER_KEY,user);
 
-                home.putExtras(b);
-                startActivity(home);
-            }
-        });
 
         // Click on btnSave: save change in personal info to db
         btnSave.setOnClickListener(new View.OnClickListener() {
