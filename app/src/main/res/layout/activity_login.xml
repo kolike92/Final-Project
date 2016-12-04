@@ -56,11 +56,6 @@
             android:id="@+id/tvError"
             android:textColor="@android:color/holo_red_dark" />
 
-        <Button
-            android:text="Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnFakeSignIn" />
     </LinearLayout>
 
 </LinearLayout>
