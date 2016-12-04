@@ -31,6 +31,7 @@
     <string name="noFacebook">Facebook user not recognized. Please log in with your Kerberos account and enable Facebook login</string>
     <string name="where"> Where? </string>
     <string name="clear_filters">Clear Filters</string>
+    <string name="time">Time</string>
 
 </resources>
 
