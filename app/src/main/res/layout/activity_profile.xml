@@ -153,7 +153,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvUpAct"
-            android:layout_weight="1"
+            android:layout_weight="0.02"
             android:textStyle="normal|bold"
             android:textSize="18sp" />
 
@@ -167,7 +167,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvPstAct"
-            android:layout_weight="1"
+            android:layout_weight="0.02"
             android:textStyle="normal|bold"
             android:textSize="18sp" />
 
@@ -181,7 +181,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvYourAct"
-            android:layout_weight="1"
+            android:layout_weight="0.01"
             android:textStyle="normal|bold"
             android:textSize="18sp" />
 
@@ -194,8 +194,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="33dp">
 
             <Button
                 android:text="@string/save"
@@ -209,11 +208,7 @@
                 android:id="@+id/tvSpace"
                 android:layout_weight="1" />
 
-            <Button
-                android:text="@string/home"
-                android:layout_width="76dp"
-                android:layout_height="35dp"
-                android:id="@+id/btnHome" />
+
         </LinearLayout>
 
     </LinearLayout>
