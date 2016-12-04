@@ -27,7 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Search terms"
             android:ems="10"
             android:id="@+id/etSearch"
             android:layout_weight="1"
@@ -43,37 +42,37 @@
         android:columnCount="3">
 
         <CheckBox
-            android:text="Food"
+            android:text="@string/food"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/checkFood"/>
 
         <CheckBox
-            android:text="Sports"
+            android:text="@string/sports"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/checkSports" />
 
         <CheckBox
-            android:text="Study Break"
+            android:text="@string/study"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/checkStudyBreak" />
 
         <CheckBox
-            android:text="Movie"
+            android:text="@string/movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/checkMovie" />
 
         <CheckBox
-            android:text="Exploring"
+            android:text="@string/explore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/checkExploring" />
 
         <CheckBox
-            android:text="Other"
+            android:text="@string/other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/checkOther" />
