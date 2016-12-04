@@ -2,12 +2,8 @@ package com.BUddy.android;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by rebeccagraber on 11/18/16.
@@ -17,7 +13,7 @@ public class BuddyUser implements Parcelable {
     private String name;
     private String phoneNum;
     private String email;
-    private Date dob;
+    private String dob;
     private ArrayList<String> eids;
     private ArrayList<String> likes;
     private String fbId;
@@ -43,10 +39,10 @@ public class BuddyUser implements Parcelable {
     }
 
 
-    public BuddyUser(String name, String phoneNum, String email, Date dob,
+    public BuddyUser(String name, String phoneNum, String email, String dob,
                      ArrayList<String> eids, ArrayList<String> likes, String fbId)
     {
-       this.name = name;
+        this.name = name;
         this.phoneNum = phoneNum;
         this.email = email;
         this.dob = dob;
@@ -98,11 +94,11 @@ public class BuddyUser implements Parcelable {
         this.phoneNum = phoneNum;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 
@@ -117,12 +113,8 @@ public class BuddyUser implements Parcelable {
         name = in.readString();
         phoneNum = in.readString();
         email = in.readString();
-        String d = in.readString();
-        try {
-            dob = StaticConstants.SDF.parse(d);
-        } catch (ParseException pe) {
-            Log.e("BUDDY", "Error: unparseable date of birth: " + d);
-        }
+
+        dob = in.readString();
         in.readStringList(eids);
         in.readStringList(likes);
         fbId = in.readString();
@@ -136,11 +128,7 @@ public class BuddyUser implements Parcelable {
         dest.writeString(name);
         dest.writeString(phoneNum);
         dest.writeString(email);
-        if (dob != null) {
-            dest.writeString(StaticConstants.SDF.format(dob));
-        } else {
-            dest.writeString("");
-        }
+        dest.writeString(dob);
         dest.writeStringList(eids);
         dest.writeStringList(likes);
         dest.writeString(fbId);
