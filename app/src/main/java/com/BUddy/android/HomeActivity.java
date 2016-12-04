@@ -219,6 +219,12 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
                     for(com.google.firebase.database.DataSnapshot d: children)
                     {
                         BUEvent eAdd = d.getValue(BUEvent.class);
+                        if(eAdd.getFirebaseId() == null)
+                        {
+                            //old events may not have firebase Ids, add them now
+                            eAdd.setFirebaseId(d.getKey());
+
+                        }
                         events.add(eAdd);
                     }
 

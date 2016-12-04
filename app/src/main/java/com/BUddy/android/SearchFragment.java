@@ -125,6 +125,10 @@ public class SearchFragment extends DialogFragment {
                                                          Iterable<DataSnapshot> snapShot = dataSnapshot.getChildren();
                                                          for (DataSnapshot d : snapShot) {
                                                              BUEvent e = d.getValue(BUEvent.class);
+                                                             if(e.getFirebaseId() == null)
+                                                             {
+                                                                 e.setFirebaseId(d.getKey());
+                                                             }
                                                              Date now = c.getTime();
                                                              if(qids.contains(e.getCategory()))// && e.getEventDate().after(now))
                                                                   {
