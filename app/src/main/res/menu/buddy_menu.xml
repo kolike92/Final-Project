@@ -8,4 +8,11 @@
         app:showAsAction="ifRoom"
         ></item>
 
+    <item
+        android:id="@+id/homeButton"
+        android:title="Home Button"
+        android:icon="@drawable/ic_menu_black_24dp"
+        app:showAsAction="ifRoom"
+        ></item>
+
 </menu>
