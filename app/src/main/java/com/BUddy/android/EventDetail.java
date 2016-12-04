@@ -295,6 +295,7 @@ public class EventDetail extends InnerActivity{
                         tvLocationSet.setEnabled(false);
                         tvTitleSet.setEnabled(false);
                         if (event.getParticipants().size() >= event.getMaxParticipants()) {
+                            btnJoin.setClickable(false);
                             btnJoin.setText("Sorry, this event is full");
 
                         } else {
