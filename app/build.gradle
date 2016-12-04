@@ -32,6 +32,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.0.2'
     compile 'com.google.android.gms:play-services-auth:9.0.2'
     compile 'com.google.android.gms:play-services-maps:9.0.2'
+    compile 'com.google.android.gms:play-services-appindexing:9.0.2'
 
 }
 
