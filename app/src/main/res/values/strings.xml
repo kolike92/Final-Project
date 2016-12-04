@@ -31,6 +31,12 @@
     <string name="noFacebook">Facebook user not recognized. Please log in with your Kerberos account and enable Facebook login</string>
     <string name="where"> Where? </string>
     <string name="clear_filters">Clear Filters</string>
+    <string name="food">Food</string>
+    <string name="sports">Sports</string>
+    <string name="study">Study Break</string>
+    <string name="movie">Movie</string>
+    <string name="explore">Exploring</string>
+    <string name="other">Others</string>
 
 </resources>
 

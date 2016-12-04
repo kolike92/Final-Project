@@ -19,7 +19,9 @@
             android:layout_height="match_parent"
             android:text="@string/search"
             android:id="@+id/tvSearch"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:textStyle="bold" />
 
         <EditText
             android:layout_width="match_parent"
@@ -28,7 +30,8 @@
             android:text="Search terms"
             android:ems="10"
             android:id="@+id/etSearch"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="fill_horizontal|center_vertical|center" />
 
     </LinearLayout>
 
