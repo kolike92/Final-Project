@@ -73,6 +73,9 @@ public abstract class InnerActivity extends AppCompatActivity {
             home.putExtra(StaticConstants.USER_KEY, user);
             startActivity(home);
         }
+        if(id == R.id.topLikes){
+            return false;
+        }
         return false;
     }
 
