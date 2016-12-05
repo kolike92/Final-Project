@@ -9,10 +9,19 @@
         ></item>
 
     <item
+        android:id="@+id/topLikes"
+        android:title="Top Likes"
+        android:icon="@drawable/ic_thumb_up_black_24dp"
+        app:showAsAction="ifRoom"
+        ></item>
+
+    <item
         android:id="@+id/homeButton"
         android:title="Home Button"
         android:icon="@drawable/ic_menu_black_24dp"
         app:showAsAction="ifRoom"
         ></item>
+
+
 
 </menu>
