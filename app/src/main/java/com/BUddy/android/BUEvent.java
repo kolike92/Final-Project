@@ -34,6 +34,9 @@ public class BUEvent implements Parcelable{
         in.readStringList(participants);
         creator = in.readString();
         firebaseId = in.readString();
+        try
+        {eventDate = StaticConstants.SDF.parse(in.readString());}
+        catch (ParseException pe){ eventDate = null;}
 
 
     }
@@ -58,6 +61,24 @@ public class BUEvent implements Parcelable{
     public BUEvent(Date d, String title, int number, String details, int category, String location, String creator)
     {
         eventDate = d;
+        eventTitle = title;
+        maxParticipants = number;
+        eventDetails = details;
+        this.category = category;
+        this.location = location;
+        participants = new ArrayList<String>();
+        this.creator = creator;
+    }
+
+    public BUEvent(String d, String title, int number, String details, int category, String location, String creator)
+    {
+        try {
+            eventDate = StaticConstants.SDF.parse(d);
+        }
+        catch (ParseException pe)
+        {
+            eventDate = null;
+        }
         eventTitle = title;
         maxParticipants = number;
         eventDetails = details;
@@ -157,18 +178,7 @@ public class BUEvent implements Parcelable{
         dest.writeStringList(participants);
         dest.writeString(creator);
         dest.writeString(firebaseId);
-        /*
-         private Date eventDate;
-    private String eventTitle;
-    private String eventDetails;
-    private  int maxParticipants;
-    private int category;
-    private String location;
-    private List<String> participants;
-    private String creator;
-    private String firebaseId; //it's easier to store this inside the object
 
-         */
         if(eventDate != null) {
             dest.writeString(StaticConstants.SDF.format(eventDate));
         }

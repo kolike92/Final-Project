@@ -43,4 +43,11 @@
         android:layout_height="wrap_content"
         android:text="@string/create"
         android:id="@+id/btnCreatePost" />
+
+    <Button
+        android:text="@string/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRefresh"
+        android:layout_weight="0.71" />
 </LinearLayout>

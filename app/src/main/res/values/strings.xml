@@ -40,6 +40,7 @@
     <string name="movie">Movie</string>
     <string name="explore">Exploring</string>
     <string name="other">Others</string>
+    <string name="refresh">Refresh results</string>
 
 
 </resources>

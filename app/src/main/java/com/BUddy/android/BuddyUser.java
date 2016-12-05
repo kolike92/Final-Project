@@ -170,6 +170,33 @@ public class BuddyUser implements Parcelable {
         }
     }
 
+    public void addLike(String eid)
+    {
+        if(likes == null)
+        {
+            likes = new ArrayList<String>();
+        }
+        boolean exists = false;
+        //arraylist.contains() doesn't seem to work here
+        for(int i = 0; i < likes.size(); i++)
+        {
+            if(likes.get(i).equals(eid)) exists = true;
+        }
+        if(!exists) likes.add(eid);
+    }
+
+    public void removeLike(String eid)
+    {
+        if(likes == null)
+        {
+            likes = new ArrayList<String>();
+        }
+        while(likes.remove(eid))
+        {
+            continue;
+        }
+    }
+
 
     public String getFirebaseId() {
         return firebaseId;
