@@ -47,7 +47,6 @@ public class EventDetail extends InnerActivity{
     private Button btnMessage;
     private Button btnJoin;
     private BUEvent event;
-    private BuddyUser user;
     private EditText tvnumpeopleSet;
 
     private String eventId;

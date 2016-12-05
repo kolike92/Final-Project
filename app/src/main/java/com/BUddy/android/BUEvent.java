@@ -33,11 +33,13 @@ public class BUEvent implements Parcelable{
         category = in.readInt();
         location = in.readString();
         in.readStringList(participants);
+        in.readStringList(likes);
         creator = in.readString();
         firebaseId = in.readString();
         try
         {eventDate = StaticConstants.SDF.parse(in.readString());}
         catch (ParseException pe){ eventDate = null;}
+
 
 
 
@@ -184,9 +186,10 @@ public class BUEvent implements Parcelable{
         dest.writeInt(category);
         dest.writeString(location);
         dest.writeStringList(participants);
+        dest.writeStringList(likes);
         dest.writeString(creator);
         dest.writeString(firebaseId);
-        dest.writeStringList(likes);
+
 
         if(eventDate != null) {
             dest.writeString(StaticConstants.SDF.format(eventDate));

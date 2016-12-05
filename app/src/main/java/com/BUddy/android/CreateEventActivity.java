@@ -32,7 +32,6 @@ public class CreateEventActivity extends InnerActivity
     SimpleDateFormat sdf, stf;
     Calendar c;
     FragmentManager fragMan;
-    BuddyUser user;
 
     //  DatePicker dpDate;
 

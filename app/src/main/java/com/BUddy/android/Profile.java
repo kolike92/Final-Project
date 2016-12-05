@@ -33,7 +33,7 @@ import java.util.Date;
  * Created by Sophia_ on 10/31/16.
  */
 
-public class Profile extends AppCompatActivity {
+public class Profile extends InnerActivity {
 
     private TextView tvNameShow;
     private EditText etName;
@@ -61,7 +61,6 @@ public class Profile extends AppCompatActivity {
 
 
 
-    private BuddyUser user;
 
     /* events database connection setup*/
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
