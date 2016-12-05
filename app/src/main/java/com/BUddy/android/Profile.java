@@ -143,12 +143,6 @@ public class Profile extends AppCompatActivity {
                          */
                     if (child.child("creator").getValue().toString().equals(user.getFirebaseId())) {            // if event creator's ID is the user's  firebase ID
                         BUEvent eAdd = child.getValue(BUEvent.class);
-                        if(eAdd.getFirebaseId() == null)
-                        {
-                            //old events may not have firebase Ids, add them now
-                            eAdd.setFirebaseId(child.getKey());
-
-                        }
                         yourEvents.add(eAdd);
                     }
 
@@ -162,18 +156,6 @@ public class Profile extends AppCompatActivity {
                         p = p.substring(1,(p.length()-1));
                         String[] participants_list = p.split(",");
                         Log.d("participants 0", participants_list[0]);
-<<<<<<< HEAD
-                        if (Arrays.asList(participants_list).contains(user.getFirebaseId())) {
-                            BUEvent eAdd = child.getValue(BUEvent.class);
-                            if(eAdd.getFirebaseId() == null)
-                            {
-                                //old events may not have firebase Ids, add them now
-                                eAdd.setFirebaseId(child.getKey());
-
-                            }
-                            joinedEvents.add(eAdd);
-                            Log.d("check joined events", eAdd.toString());
-=======
                         try {
                             if (Arrays.asList(participants_list).contains(user.getFirebaseId())) {          // if the user's fireabase ID is in the participants_list
                                 BUEvent eAdd = child.getValue(BUEvent.class);
@@ -185,7 +167,6 @@ public class Profile extends AppCompatActivity {
                             }
                         } catch (NullPointerException e) {
                             Log.d("Null Pointer Exception", "No Event Date");
->>>>>>> 835d71085a1a2251cb7e35beb916957d8e943bb5
                         }
                     }
 
