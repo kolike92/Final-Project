@@ -70,7 +70,6 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
     isFiltered = savedInstanceState.getBoolean(StaticConstants.FILTERED_KEY);
 
     if(!isFiltered) {
-        events.clear();
         long now = System.currentTimeMillis();
         showAllEvents();
     }
@@ -184,7 +183,6 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
         btnRefreshResults.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                events.clear();
                 showAllEvents();
             }
         });
@@ -216,6 +214,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
 
     private void showAllEvents()
     {
+        events.clear();
         long now = System.currentTimeMillis();
         dbRef = firebaseDatabase.getReference("events");
         Query q = firebaseDatabase.getReference("events").orderByChild("eventDate/time").startAt(now);

@@ -142,6 +142,12 @@ public class Profile extends AppCompatActivity {
                          */
                     if (child.child("creator").getValue().toString().equals(user.getFirebaseId())) {
                         BUEvent eAdd = child.getValue(BUEvent.class);
+                        if(eAdd.getFirebaseId() == null)
+                        {
+                            //old events may not have firebase Ids, add them now
+                            eAdd.setFirebaseId(child.getKey());
+
+                        }
                         yourEvents.add(eAdd);
                     }
 
@@ -157,6 +163,12 @@ public class Profile extends AppCompatActivity {
                         Log.d("participants 0", participants_list[0]);
                         if (Arrays.asList(participants_list).contains(user.getFirebaseId())) {
                             BUEvent eAdd = child.getValue(BUEvent.class);
+                            if(eAdd.getFirebaseId() == null)
+                            {
+                                //old events may not have firebase Ids, add them now
+                                eAdd.setFirebaseId(child.getKey());
+
+                            }
                             joinedEvents.add(eAdd);
                             Log.d("check joined events", eAdd.toString());
                         }

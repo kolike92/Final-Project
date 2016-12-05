@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CreateEventActivity extends AppCompatActivity
+public class CreateEventActivity extends InnerActivity
         implements TimePickerFragment.OnTimeSelectedListener, DatePickerFragment.OnDateSelectedListener{
 
     Button btnCreate, btnCancel;
