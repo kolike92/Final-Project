@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -118,7 +117,7 @@ public class CreateEventActivity extends InnerActivity
 
                 Date d = c.getTime();
                 EventCategory category = (EventCategory) spnCategories.getSelectedItem();
-                BUEvent e = new BUEvent(d, title, number, details, category.getId(), location, user.getFirebaseId());
+                BUEvent e = new BUEvent(d, title, number, details, category.getId(), location, user.getFirebaseId(),0);
                 DatabaseReference eventRef = myRef.push();
                 e.setFirebaseId(eventRef.getKey());
                 eventRef.setValue(e);

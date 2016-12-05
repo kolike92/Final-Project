@@ -22,18 +22,17 @@ public class BUEvent implements Parcelable{
     private List<String> participants;
     private String creator;
     private String firebaseId; //it's easier to store this inside the object
-    private List<String> likes;
+    private int likes;
 
     private BUEvent(Parcel in) {
         participants = new ArrayList<>();
-        likes = new ArrayList<>();
         eventTitle = in.readString();
         eventDetails = in.readString();
         maxParticipants = in.readInt();
         category = in.readInt();
         location = in.readString();
         in.readStringList(participants);
-        in.readStringList(likes);
+        likes = in.readInt();
         creator = in.readString();
         firebaseId = in.readString();
         try
@@ -62,7 +61,7 @@ public class BUEvent implements Parcelable{
         this.participants = new ArrayList<String>();
     }
 
-    public BUEvent(Date d, String title, int number, String details, int category, String location, String creator)
+    public BUEvent(Date d, String title, int number, String details, int category, String location, String creator, int likes)
     {
         eventDate = d;
         eventTitle = title;
@@ -72,10 +71,10 @@ public class BUEvent implements Parcelable{
         this.location = location;
         participants = new ArrayList<String>();
         this.creator = creator;
-        likes = new ArrayList<String>();
+        this.likes = likes;
     }
 
-    public BUEvent(String d, String title, int number, String details, int category, String location, String creator)
+    public BUEvent(String d, String title, int number, String details, int category, String location, String creator, int likes)
     {
         try {
             eventDate = StaticConstants.SDF.parse(d);
@@ -91,7 +90,7 @@ public class BUEvent implements Parcelable{
         this.location = location;
         participants = new ArrayList<String>();
         this.creator = creator;
-        likes = new ArrayList<String>();
+        this.likes = likes;
     }
 
 
@@ -148,13 +147,13 @@ public class BUEvent implements Parcelable{
         return participants;
     }
 
-    public List<String> getLikes() { return likes;}
+    public int getLikes() { return likes;}
 
     public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
 
-    public void setLikes(List<String> likes) { this.likes = likes;}
+    public void setLikes(int likes) { this.likes = likes;}
 
     public String getCreator() {
         return creator;
@@ -186,7 +185,7 @@ public class BUEvent implements Parcelable{
         dest.writeInt(category);
         dest.writeString(location);
         dest.writeStringList(participants);
-        dest.writeStringList(likes);
+        dest.writeInt(likes);
         dest.writeString(creator);
         dest.writeString(firebaseId);
 
@@ -212,19 +211,14 @@ public class BUEvent implements Parcelable{
         }
     }
 
-    public void addLike(String uid)
+    public void addLike()
     {
-        if (likes == null) likes = new ArrayList<String>();
-        likes.add(uid);
+        likes = likes+1;
     }
 
-    public void removeLike(String uid)
+    public void removeLike()
     {
-        if ( likes == null) likes = new ArrayList<String>();
-        while(likes.remove(uid))
-        {
-            continue;
-        }
+        likes = likes-1;
     }
 
 
