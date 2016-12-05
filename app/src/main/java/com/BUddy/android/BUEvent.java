@@ -2,7 +2,6 @@ package com.BUddy.android;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -23,9 +22,11 @@ public class BUEvent implements Parcelable{
     private List<String> participants;
     private String creator;
     private String firebaseId; //it's easier to store this inside the object
+    private List<String> likes;
 
     private BUEvent(Parcel in) {
         participants = new ArrayList<>();
+        likes = new ArrayList<>();
         eventTitle = in.readString();
         eventDetails = in.readString();
         maxParticipants = in.readInt();
@@ -37,6 +38,7 @@ public class BUEvent implements Parcelable{
         try
         {eventDate = StaticConstants.SDF.parse(in.readString());}
         catch (ParseException pe){ eventDate = null;}
+
 
 
     }
@@ -68,6 +70,7 @@ public class BUEvent implements Parcelable{
         this.location = location;
         participants = new ArrayList<String>();
         this.creator = creator;
+        likes = new ArrayList<String>();
     }
 
     public BUEvent(String d, String title, int number, String details, int category, String location, String creator)
@@ -86,6 +89,7 @@ public class BUEvent implements Parcelable{
         this.location = location;
         participants = new ArrayList<String>();
         this.creator = creator;
+        likes = new ArrayList<String>();
     }
 
 
@@ -142,9 +146,13 @@ public class BUEvent implements Parcelable{
         return participants;
     }
 
+    public List<String> getLikes() { return likes;}
+
     public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
+
+    public void setLikes(List<String> likes) { this.likes = likes;}
 
     public String getCreator() {
         return creator;
@@ -178,6 +186,7 @@ public class BUEvent implements Parcelable{
         dest.writeStringList(participants);
         dest.writeString(creator);
         dest.writeString(firebaseId);
+        dest.writeStringList(likes);
 
         if(eventDate != null) {
             dest.writeString(StaticConstants.SDF.format(eventDate));
@@ -190,10 +199,26 @@ public class BUEvent implements Parcelable{
         participants.add(uid);
     }
 
+
     public void removeParticipant(String uid)
     {
         if (participants == null) participants = new ArrayList<String>();
         while(participants.remove(uid))
+        {
+            continue;
+        }
+    }
+
+    public void addLike(String uid)
+    {
+        if (likes == null) likes = new ArrayList<String>();
+        likes.add(uid);
+    }
+
+    public void removeLike(String uid)
+    {
+        if ( likes == null) likes = new ArrayList<String>();
+        while(likes.remove(uid))
         {
             continue;
         }
