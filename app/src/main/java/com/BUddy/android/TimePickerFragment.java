@@ -17,15 +17,18 @@ import java.util.Calendar;
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
 
     OnTimeSelectedListener mListen;
+    Context mContext;
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            mContext = getActivity();
+            mListen = (OnTimeSelectedListener) getActivity();
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
             // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
+            return new TimePickerDialog(mContext, this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
 
