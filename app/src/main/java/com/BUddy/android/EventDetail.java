@@ -3,12 +3,9 @@ package com.BUddy.android;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,16 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
-import com.google.firebase.database.Query;
-
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by Sophia_ on 10/31/16.
@@ -67,6 +59,8 @@ public class EventDetail extends InnerActivity{
 
     private boolean joined;
     private boolean isOwner;
+    private boolean liked;
+    private boolean past;
 
 
     private  Button btnMap;
@@ -105,6 +99,15 @@ public class EventDetail extends InnerActivity{
         if(user.getEids().contains(eventId))
         {
             joined = true;
+        }
+        if(user.getLikes().contains(eventId))
+        {
+            liked = true;
+        }
+        long now = System.currentTimeMillis();
+        if(event.getEventDate() == null || now > event.getEventDate().getTime() )
+        {
+            past = true;
         }
 
 
@@ -197,34 +200,37 @@ public class EventDetail extends InnerActivity{
                     startActivity(home);
                     return;
                 }
-                dbEvent.runTransaction(new Transaction.Handler() {
-                    @Override
-                    public Transaction.Result doTransaction(MutableData mutableData) {
-                        BUEvent current = mutableData.getValue(BUEvent.class);
-                        if (current != null) {
-                            event = current;
+                if(!past) {
+                    //event has not passed, user is joining or leaving
+                    dbEvent.runTransaction(new Transaction.Handler() {
+                        @Override
+                        public Transaction.Result doTransaction(MutableData mutableData) {
+                            BUEvent current = mutableData.getValue(BUEvent.class);
+                            if (current != null) {
+                                event = current;
+                            }
+
+                            if (event.getParticipants().size() > event.getMaxParticipants()) {
+                                Toast.makeText(getBaseContext(), "Oops, someone beat you to it!", Toast.LENGTH_LONG);
+                                return Transaction.abort();
+                            } else {
+                                if (joined) {
+                                    event.removeParticipant(user.getFirebaseId());
+                                } else {
+                                    event.addParticipant(user.getFirebaseId());
+                                }
+                                mutableData.setValue(event);
+                            }
+                            return Transaction.success(mutableData);
                         }
 
-                        if (event.getParticipants().size() > event.getMaxParticipants()) {
-                            Toast.makeText(getBaseContext(), "Oops, someone beat you to it!", Toast.LENGTH_LONG);
-                            return Transaction.abort();
-                        } else {
-                            if(joined) {
-                                event.removeParticipant(user.getFirebaseId());
-                            }
-                            else {
-                                event.addParticipant(user.getFirebaseId());
-                            }
-                            mutableData.setValue(event);
+                        @Override
+                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                            Log.d(StaticConstants.TAG, "Yo");
                         }
-                        return Transaction.success(mutableData);
-                    }
-
-                    @Override
-                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                        Log.d(StaticConstants.TAG, "Yo");
-                    }
-                });
+                    });
+                }
+                //user could be joining, leaving, liking, or unliking
                 dbUser.runTransaction(new Transaction.Handler() {
                     @Override
                     public Transaction.Result doTransaction(MutableData mutableData) {
@@ -232,12 +238,19 @@ public class EventDetail extends InnerActivity{
                         if (current != null) {
                             user = current;
                         }
-
-                            if(joined) {
+                            if(!past && joined) {
                                 user.removeEvent(event.getFirebaseId());
                             }
-                            else {
+                            else if (!past && !joined) {
                                 user.addEvent(event.getFirebaseId());
+                            }
+                        else if(past && liked)
+                            {
+                                user.removeLike(event.getFirebaseId());
+                            }
+                        else
+                            {
+                                user.addLike(event.getFirebaseId());
                             }
                             mutableData.setValue(user);
 
@@ -248,7 +261,9 @@ public class EventDetail extends InnerActivity{
                     public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
                         if(databaseError != null) Log.d(StaticConstants.TAG, databaseError.getMessage());
                         else {
-                            joined = !joined;
+                            if(!past) joined = !joined;
+                            else liked = !liked;
+
                             setJoinButtonText();
                             String left_or_joined = joined ? "joined" : "left";
                             Toast.makeText(getApplicationContext(),
@@ -288,13 +303,13 @@ public class EventDetail extends InnerActivity{
                         isOwner = true;
                         btnJoin.setText("Cancel Event");
                         tvTitleSet.setEnabled(true);
-                        tvTitleSet.addTextChangedListener(new ChangeEventListener("eventTitle"));
+                        tvTitleSet.addTextChangedListener(new StringChangeEventListener("eventTitle"));
                         tvDetailsSet.setEnabled(true);
-                        tvDetailsSet.addTextChangedListener(new ChangeEventListener("eventDetails"));
+                        tvDetailsSet.addTextChangedListener(new StringChangeEventListener("eventDetails"));
                         tvDateSet.setEnabled(true);
-                        tvDateSet.addTextChangedListener(new ChangeEventListener("eventDate"));
+                        tvDateSet.addTextChangedListener(new DateChangeEventListener("eventDate"));
                         tvLocationSet.setEnabled(true);
-                        tvLocationSet.addTextChangedListener(new ChangeEventListener("eventLocation"));
+                        tvLocationSet.addTextChangedListener(new StringChangeEventListener("eventLocation"));
 
                     } else {
                         tvTitleSet.setEnabled(false);
@@ -366,9 +381,23 @@ public class EventDetail extends InnerActivity{
 
     private void setJoinButtonText()
     {
-        if (joined) btnJoin.setText("Leave Event");
-        else btnJoin.setText("Join");
+        if(!past)
+        {
+            if (joined) btnJoin.setText("Leave Event");
+            else btnJoin.setText("Join");
+        }
+        else
+        {
+            if(joined) {
+                if (liked) btnJoin.setText("Unlike");
+                else btnJoin.setText("Like");
+            }
+            else btnJoin.setText("This event has passed");
+            btnJoin.setClickable(false);
+        }
+
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
@@ -405,21 +434,14 @@ public class EventDetail extends InnerActivity{
 //>>>>>>> 810f6264fd8a818c426545aca4e017df9dd6cd7d
     }
 
-    @Override
-    protected void onStop()
-    {
 
-        Log.d(StaticConstants.TAG, "onStop");
 
-        super.onStop();
-    }
-
-    private class ChangeEventListener implements TextWatcher
+    private class StringChangeEventListener implements TextWatcher
     {
         String child;
 
 
-        public ChangeEventListener(String sChild)
+        public StringChangeEventListener(String sChild)
         {
             child = sChild;
 
@@ -441,6 +463,44 @@ public class EventDetail extends InnerActivity{
             String newVal = s.toString();
             DatabaseReference thisRef = dbEvent.child(child);
             thisRef.setValue(newVal);
+        }
+    }
+
+    private class DateChangeEventListener implements TextWatcher
+    {
+        String child;
+
+
+        public DateChangeEventListener(String sChild)
+        {
+            child = sChild;
+
+        }
+
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String newVal = s.toString();
+            Date d;
+            try {
+                d = StaticConstants.SDF.parse(newVal);
+            }
+            catch (ParseException pe)
+            {
+                d = null;
+            }
+            DatabaseReference thisRef = dbEvent.child(child);
+            thisRef.setValue(d);
         }
     }
 

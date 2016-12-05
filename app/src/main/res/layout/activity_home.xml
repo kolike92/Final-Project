@@ -52,4 +52,10 @@
         android:text="@string/create"
         android:id="@+id/btnCreatePost"
         android:layout_gravity="bottom" />
+
+    <Button
+        android:text="@string/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRefresh" />
 </LinearLayout>

@@ -49,7 +49,7 @@ public class HomeActivity extends InnerActivity implements SearchFragment.Dialog
     private ImageButton ibtnProfile;
     private ListView lvActivities;
     private Button btnFilter, btnClearFilters;
-    private Button btnCreatePost;
+    private Button btnCreatePost, btnRefreshResults;
 
 
     private boolean isFiltered;
@@ -109,6 +109,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
         lvActivities = (ListView) findViewById(R.id.lvActivities);
         btnFilter = (Button) findViewById(R.id.btnFilter);
         btnCreatePost = (Button) findViewById(R.id.btnCreatePost);
+        btnRefreshResults = (Button) findViewById(R.id.btnRefresh);
         Bundle b = getIntent().getExtras();
         btnClearFilters = (Button) findViewById(R.id.btnClearFilters);
         user = getIntent().getExtras().getParcelable(StaticConstants.USER_KEY);
@@ -177,6 +178,14 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
 
                 profile.putExtras(b);
                 startActivity(profile);
+            }
+        });
+
+        btnRefreshResults.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                events.clear();
+                showAllEvents();
             }
         });
 
