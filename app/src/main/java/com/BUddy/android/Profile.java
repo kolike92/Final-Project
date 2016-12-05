@@ -58,16 +58,15 @@ public class Profile extends AppCompatActivity {
     private ArrayList<BUEvent> upEvents;
     private ArrayList<BUEvent> pstEvents;
     private ArrayList<BUEvent> yourEvents;
-    private ArrayList<BUEvent> joinedEvents;
 
 
 
     private BuddyUser user;
 
-
+    /* events database connection setup*/
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
-    private DatabaseReference dbUser = db.getReference("users/");
     private DatabaseReference dbEvent = db.getReference("events/");
+    private DatabaseReference dbUser = db.getReference("users/");
 
 
     /**
@@ -104,11 +103,12 @@ public class Profile extends AppCompatActivity {
         upEvents = new ArrayList<BUEvent>();
         yourEvents = new ArrayList<BUEvent>();
         pstEvents = new ArrayList<BUEvent>();
-        joinedEvents =new ArrayList<BUEvent>();
 
 
 
         user = getIntent().getExtras().getParcelable(StaticConstants.USER_KEY);
+
+        /* fill in user information */
         try {
             etName.setText(user.getName());
         }
@@ -133,14 +133,15 @@ public class Profile extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
 
+        /* event database listener */
         dbEvent.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                         /*
-                         * add event to owned event list if event key is in the eids list
+                         * add event to owned event list
                          */
-                    if (child.child("creator").getValue().toString().equals(user.getFirebaseId())) {
+                    if (child.child("creator").getValue().toString().equals(user.getFirebaseId())) {            // if event creator's ID is the user's  firebase ID
                         BUEvent eAdd = child.getValue(BUEvent.class);
                         yourEvents.add(eAdd);
                     }
@@ -155,10 +156,17 @@ public class Profile extends AppCompatActivity {
                         p = p.substring(1,(p.length()-1));
                         String[] participants_list = p.split(",");
                         Log.d("participants 0", participants_list[0]);
-                        if (Arrays.asList(participants_list).contains(user.getFirebaseId())) {
-                            BUEvent eAdd = child.getValue(BUEvent.class);
-                            joinedEvents.add(eAdd);
-                            Log.d("check joined events", eAdd.toString());
+                        try {
+                            if (Arrays.asList(participants_list).contains(user.getFirebaseId())) {          // if the user's fireabase ID is in the participants_list
+                                BUEvent eAdd = child.getValue(BUEvent.class);
+                                Date currentDate = new Date();                                              // current time
+                                if (eAdd.getEventDate().before(currentDate))                                // if the event happened before current time
+                                    pstEvents.add(eAdd);                                                    // add event to the past event list
+                                else
+                                    upEvents.add(eAdd);                                                     // else add event to the up coming event list
+                            }
+                        } catch (NullPointerException e) {
+                            Log.d("Null Pointer Exception", "No Event Date");
                         }
                     }
 
@@ -175,19 +183,6 @@ public class Profile extends AppCompatActivity {
 
         });
 
-        try {
-            for (int i = 0; i < joinedEvents.size(); i++) {
-                BUEvent e = joinedEvents.get(i);
-                Date currentDate = new Date();
-
-                if (e.getEventDate().before(currentDate)) {
-                    pstEvents.add(e);
-                } else {
-                    upEvents.add(e);
-                }
-
-            }
-        } catch (NullPointerException e) {}
         /*
          *
          *
@@ -267,7 +262,7 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
 
                 Query q = dbUser.orderByKey().equalTo(user.getFirebaseId());
-                Log.d("user email", user.getEmail());
+
                 q.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
