@@ -17,9 +17,17 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 {
     private OnDateSelectedListener mListen;
     private Context mContext;
+
+
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
+
+
+        mContext = getActivity();
+        mListen = (OnDateSelectedListener) getActivity();
+
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
