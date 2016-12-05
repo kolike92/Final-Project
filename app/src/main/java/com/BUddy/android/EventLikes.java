@@ -47,9 +47,8 @@ public class EventLikes extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child:dataSnapshot.getChildren()) {
                     try {
-                        String likes = child.child("likes").getValue().toString();
-                        likes = likes.substring(1,(likes.length()-1));
-                        String[] likes_list = likes.split(",");
+
+
 
                     } catch (NullPointerException e) {}
 
