@@ -199,7 +199,8 @@ public class EventDetail extends InnerActivity{
                     startActivity(home);
                     return;
                 }
-                if(!past) {
+
+
                     //event has not passed, user is joining or leaving
                     dbEvent.runTransaction(new Transaction.Handler() {
                         @Override
@@ -213,10 +214,18 @@ public class EventDetail extends InnerActivity{
                                 Toast.makeText(getBaseContext(), "Oops, someone beat you to it!", Toast.LENGTH_LONG);
                                 return Transaction.abort();
                             } else {
-                                if (joined) {
+                                if (!past && joined) {
                                     event.removeParticipant(user.getFirebaseId());
-                                } else {
+                                } else if(!past && !joined) {
                                     event.addParticipant(user.getFirebaseId());
+                                }
+                                else if(past && liked)
+                                {
+                                    event.removeLike();
+                                }
+                                else
+                                {
+                                    event.addLike();
                                 }
                                 mutableData.setValue(event);
                             }
@@ -225,10 +234,13 @@ public class EventDetail extends InnerActivity{
 
                         @Override
                         public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                            Log.d(StaticConstants.TAG, "Yo");
+                            if(databaseError != null)
+                            {
+                                Log.d(StaticConstants.TAG, "Error updating the events database: " + databaseError.getMessage());
+                            }
                         }
                     });
-                }
+
                 //user could be joining, leaving, liking, or unliking
                 dbUser.runTransaction(new Transaction.Handler() {
                     @Override
@@ -287,9 +299,6 @@ public class EventDetail extends InnerActivity{
                     tvDateSet.setText(StaticConstants.SDF.format(event.getEventDate()));
                     Calendar c = Calendar.getInstance();
                     Date now = c.getTime();
-                    if (now.after(event.getEventDate())) {
-                        btnJoin.setClickable(false);
-                    }
 
 
                     tvLocationSet.setText(event.getLocation());
@@ -318,6 +327,7 @@ public class EventDetail extends InnerActivity{
                         if (event.getParticipants().size() >= event.getMaxParticipants()) {
                             btnJoin.setClickable(false);
                             btnJoin.setText("Sorry, this event is full");
+                            btnJoin.setClickable(false);
 
                         } else {
                             // btnJoin.setOnClickListener(joinListener);
@@ -374,6 +384,8 @@ public class EventDetail extends InnerActivity{
 
 
         dbEvent.addListenerForSingleValueEvent(postListener);
+        Log.d(StaticConstants.TAG, btnJoin.isClickable()? "true":"false");
+        Log.d(StaticConstants.TAG, btnJoin.isEnabled()? "true":"false");
 
     }
 
@@ -390,9 +402,12 @@ public class EventDetail extends InnerActivity{
             if(joined) {
                 if (liked) btnJoin.setText("Unlike");
                 else btnJoin.setText("Like");
+                btnJoin.setClickable(true);
             }
-            else btnJoin.setText("This event has passed");
-            btnJoin.setClickable(false);
+            else {
+                btnJoin.setText("This event has passed");
+                btnJoin.setClickable(false);
+            }
         }
 
     }
