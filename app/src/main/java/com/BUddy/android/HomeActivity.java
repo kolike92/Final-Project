@@ -76,7 +76,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
     else
     {
         filteredEvents = savedInstanceState.getParcelableArrayList(StaticConstants.FILTERED_EVENTS_KEY);
-        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase,user);
         lvActivities.setAdapter(lvAdapater);
     }
 }
@@ -121,7 +121,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
         if(!isFiltered) showAllEvents();
         else
         {
-            lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+            lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase,user);
             lvActivities.setAdapter(lvAdapater);
         }
 
@@ -203,7 +203,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
     public void onFinishEditDialog(ArrayList<BUEvent> eventList, boolean cancel) {
         if(cancel) return; //do nothing
         filteredEvents = eventList;
-        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase, user);
         lvActivities.setAdapter(lvAdapater);
         isFiltered = true;
         if(filteredEvents.size() == 0) Toast.makeText(getBaseContext(),
@@ -236,7 +236,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
                         events.add(eAdd);
                     }
 
-                    lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase);
+                    lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase, user);
                     lvActivities.setAdapter(lvAdapater);
                 }
             }
@@ -253,6 +253,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
 class EventListAdapter extends BaseAdapter {
     private ArrayList<BUEvent> buEvents;
     private FirebaseDatabase firebaseDatabase;
+    private BuddyUser user;
 
    // private TextView tvCreatedBy; //this is passed around
 
@@ -261,10 +262,11 @@ class EventListAdapter extends BaseAdapter {
 
     Context context;
 
-    public EventListAdapter(Context aContext, ArrayList<BUEvent> buEvents, FirebaseDatabase firebaseDatabase) {
+    public EventListAdapter(Context aContext, ArrayList<BUEvent> buEvents, FirebaseDatabase firebaseDatabase, BuddyUser user) {
         context = aContext;
         this.buEvents = buEvents;
         this.firebaseDatabase = firebaseDatabase;
+        this.user = user;
 
     }
 
@@ -296,12 +298,17 @@ class EventListAdapter extends BaseAdapter {
         TextView tvEventTitle = (TextView) row.findViewById(R.id.tvEventTitle);
         TextView tvEventDescription = (TextView) row.findViewById(R.id.tvEventDescription);
         TextView tvCreateTime = (TextView) row.findViewById(R.id.tvCreateTime);
+        TextView tvLiked = (TextView) row.findViewById(R.id.tvLiked);
         final TextView tvCreatedBy = (TextView) row.findViewById(R.id.tvEventOwner);
 
         try{
             BUEvent thisEvent = buEvents.get(position);
             tvEventTitle.setText(thisEvent.getEventTitle());
             tvEventDescription.setText(thisEvent.getEventDetails());
+            if(user.getLikes().contains(thisEvent.getFirebaseId()))
+            {
+                tvLiked.setVisibility(View.VISIBLE);
+            }
 
             DatabaseReference dbCreator = firebaseDatabase.getReference("users/" + thisEvent.getCreator());
             dbCreator.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {

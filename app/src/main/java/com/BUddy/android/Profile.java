@@ -50,7 +50,7 @@ public class Profile extends InnerActivity {
     private ListView lvPstAct;
     private TextView tvYourAct;
     private ListView lvYourAct;
-    private Button btnSave;
+    private TextView tvLiked;    private Button btnSave;
     private ListAdapter upActAdapter;
     private ListAdapter pstActAdapter;
     private ListAdapter yourActAdapter;
@@ -97,6 +97,7 @@ public class Profile extends InnerActivity {
         lvPstAct = (ListView) findViewById(R.id.lvPstAct);
         tvYourAct = (TextView) findViewById(R.id.tvYourAct);
         lvYourAct = (ListView) findViewById(R.id.lvYourAct);
+
         btnSave = (Button) findViewById(R.id.btnSave);
 
         upEvents = new ArrayList<BUEvent>();
@@ -192,7 +193,7 @@ public class Profile extends InnerActivity {
          */
         /* Up Coming Events*/
         try {
-            upActAdapter = new EventListAdapter(this.getBaseContext(), upEvents, FirebaseDatabase.getInstance());
+            upActAdapter = new EventListAdapter(this.getBaseContext(), upEvents, FirebaseDatabase.getInstance(), user);
             lvUpAct.setAdapter(upActAdapter);
             lvUpAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -212,7 +213,7 @@ public class Profile extends InnerActivity {
         Past Events
         */
         try {
-            pstActAdapter = new EventListAdapter(getBaseContext(), pstEvents, FirebaseDatabase.getInstance());
+            pstActAdapter = new EventListAdapter(getBaseContext(), pstEvents, FirebaseDatabase.getInstance(),user);
             lvPstAct.setAdapter(pstActAdapter);
 
             lvPstAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -233,7 +234,7 @@ public class Profile extends InnerActivity {
          * owned Events
          */
         try {
-            yourActAdapter = new EventListAdapter(getBaseContext(), yourEvents, FirebaseDatabase.getInstance());
+            yourActAdapter = new EventListAdapter(getBaseContext(), yourEvents, FirebaseDatabase.getInstance(),user);
             lvYourAct.setAdapter(yourActAdapter);
 
 
