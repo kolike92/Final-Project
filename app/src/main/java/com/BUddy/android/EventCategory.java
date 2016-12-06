@@ -1,35 +1,62 @@
+/**
+ * Enum: EventCategory
+ * @author NOGE
+ * An enum for the types of events: Food, Sports, Study Break, Movie, Exploring, Other
+ */
+
 package com.BUddy.android;
+
+import android.content.Context;
 
 /**
  * Created by rebeccagraber on 11/1/16.
  */
 
 public enum EventCategory {
-        FOOD(1,"Food"),
-        SPORTS(2,"Sports"),
-        STUDY_BREAK(3,"Study Break"),
-        MOVIE(4, "Movie"),
-        EXPLORING(5,"Exploring"),
-        OTHER(6,"Other");
+        FOOD(1,R.string.food),
+        SPORTS(2,R.string.sports),
+        STUDY_BREAK(3,R.string.study),
+        MOVIE(4, R.string.movie),
+        EXPLORING(5,R.string.explore),
+        OTHER(6,R.string.other);
 
     private final int id;
-    private final String name;
+    private final int resId;
 
-    EventCategory(int id, String name)
+    /**
+     * Constructor
+     * @param id
+     * @param resId
+     */
+    EventCategory(int id, int resId)
     {
         this.id = id;
-        this.name = name;
+        this.resId = resId;
     }
 
-    public String getName()
+    /**
+     * Get category string
+     * @param c
+     * @return
+     */
+    public String getName(Context c)
     {
-        return name;
+        return c.getString(resId);
     }
 
+    /**
+     * Get category id
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Get category by category id
+     * @param id
+     * @return
+     */
     public static EventCategory getById(int id)
     {
         switch (id)
@@ -43,17 +70,21 @@ public enum EventCategory {
         }
     }
 
-    public static EventCategory getByName(String name)
+    /**
+     * Get event category by name (must match string in R.string)
+     * @param c Context for getting string values
+     * @param name
+     * @return
+     */
+    public static EventCategory getByName(Context c, String name)
     {
-        switch (name)
-        {
-            case "Food": return FOOD;
-            case "Sports": return SPORTS;
-            case "Study Break": return STUDY_BREAK;
-            case "Movie": return MOVIE;
-            case "Exploring": return EXPLORING;
-            default: return OTHER;
-        }
+        // can't use switches with non constants
+        if(c.getString(R.string.food).equals(name)) return FOOD;
+        if(c.getString(R.string.sports).equals(name)) return SPORTS;
+        if(c.getString(R.string.study).equals(name)) return STUDY_BREAK;
+        if(c.getString(R.string.movie).equals(name)) return MOVIE;
+        if(c.getString(R.string.explore).equals(name)) return EXPLORING;
+        else return OTHER;
     }
 
 

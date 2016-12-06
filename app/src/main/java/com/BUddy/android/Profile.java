@@ -1,3 +1,9 @@
+/**
+ * Class: Profile
+ * @author NOGE
+ * Superclass: InnerActivity
+ */
+
 package com.BUddy.android;
 
 import android.content.Intent;
@@ -29,12 +35,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-/**
- * Created by Sophia_ on 10/31/16.
- */
-
 public class Profile extends InnerActivity {
 
+    //UI elements
     private TextView tvNameShow;
     private EditText etName;
     private TextView tvPhoneNumShow;
@@ -50,11 +53,12 @@ public class Profile extends InnerActivity {
     private ListView lvPstAct;
     private TextView tvYourAct;
     private ListView lvYourAct;
-    private TextView tvLiked;    private Button btnSave;
+    private Button btnSave;
     private ListAdapter upActAdapter;
     private ListAdapter pstActAdapter;
     private ListAdapter yourActAdapter;
 
+    //Events: upcoming, past, user-created
     private ArrayList<BUEvent> upEvents;
     private ArrayList<BUEvent> pstEvents;
     private ArrayList<BUEvent> yourEvents;
@@ -104,8 +108,7 @@ public class Profile extends InnerActivity {
         yourEvents = new ArrayList<BUEvent>();
         pstEvents = new ArrayList<BUEvent>();
 
-
-
+        //get user from bundle
         user = getIntent().getExtras().getParcelable(StaticConstants.USER_KEY);
 
         /* fill in user information */
@@ -189,7 +192,8 @@ public class Profile extends InnerActivity {
          *
          * List View Adapter
          *
-         *
+         *For all adapters, on event click, go to the EventDetail page, passing
+         * the user and the event
          */
         /* Up Coming Events*/
         try {

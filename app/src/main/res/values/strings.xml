@@ -31,6 +31,8 @@
     <string name="noFacebook">Facebook user not recognized. Please log in with your Kerberos account and enable Facebook login</string>
     <string name="where"> Where? </string>
     <string name="clear_filters">Clear Filters</string>
+    <string name="choose_time">Choose Time</string>
+    <string name="choose_date">Choose Date</string>
 
     <string name="time">Time</string>
 
@@ -42,6 +44,30 @@
     <string name="other">Others</string>
     <string name="refresh">Refresh results</string>
     <string name="liked_this">You liked this</string>
+
+    <string name="question_about_event">Question about event on BUddy</string>
+    <string name="unable_to_find_texting_activity">Unable to find texting activity</string>
+    <string name="unable_to_find_creator_number">Cannot find number to message</string>
+    <string name="canceling_event">Canceling event</string>
+
+    <string name="beat_to_it">Oops, someone beat you to it!</string>
+
+    <string name="left_event">You have left the event </string>
+    <string name="joined_event">You have joined the event </string>
+    <string name="liked_event">You have liked the event </string>
+    <string name="unliked_event">You have unliked the event </string>
+
+    <string name="cancel_event">Cancel event</string>
+    <string name="event_full">Sorry, this event is full</string>
+    <string name="no_phone_number">No phone number available</string>
+
+    <string name="leave_event">Leave event</string>
+    <string name="join_event">Join event</string>
+    <string name="like_event">Like event</string>
+    <string name="unlike_event">Unlike event</string>
+    <string name="event_passed">This event has passed</string>
+
+    <string name="no_results_found">No results found</string>
 
 
 </resources>

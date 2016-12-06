@@ -1,3 +1,11 @@
+/**
+ * Class: TimePickerFragment
+ * Superclass: DialogFragment
+ * Implements: TimePickerDialog.OnTimeSetListener
+ * @author NOGE
+ * Pops out time picker dialog
+ */
+
 package com.BUddy.android;
 
 import android.app.Dialog;
@@ -10,9 +18,6 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-/**
- * Created by rebeccagraber on 11/4/16.
- */
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
 
@@ -32,10 +37,12 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
                     DateFormat.is24HourFormat(getActivity()));
         }
 
+        //call listener in activity
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             mListen.onTimeSelected(hourOfDay, minute);
         }
 
+    //for activity callbacks
     public interface OnTimeSelectedListener
     {
         public void onTimeSelected(int hourOfDay, int minute);

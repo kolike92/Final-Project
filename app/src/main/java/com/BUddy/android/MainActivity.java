@@ -1,3 +1,10 @@
+/**
+ * Class: MainActivity
+ * @author NOGE
+ * Superclass: AppCompatActivity
+ * Implements: GoogleApiClient.OnConnectionFailedListener
+ */
+
 package com.BUddy.android;
 
 import android.content.Intent;
@@ -47,8 +54,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     private CallbackManager callbackManager;
     private GoogleApiClient mGoogleApiClient;
     private Button btnBULogin;
-    private static final int RC_SIGN_IN = 9001;
-    private static final int FB_SIGN_IN = 9002;
+    private static final int RC_SIGN_IN = 9001; //Google activity request code
     private TextView tvError;
     private ImageView logo;
 
@@ -62,16 +68,19 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        //if we somehow got shut down in the middle, restore the user and the email
         if(savedInstanceState != null)
         {
             email = savedInstanceState.getString(StaticConstants.EMAIL_KEY);
             user = (BuddyUser) savedInstanceState.getParcelable(StaticConstants.USER_KEY);
         }
 
+        //initialize Facebook SDK (required)
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
-        // initial
+        //make sure app has a valid signature
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.BUddy.android",
@@ -86,16 +95,23 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         } catch (NoSuchAlgorithmException e) {
 
         }
+
+        //set up UI
         logo = (ImageView) findViewById(R.id.logo);
         logo.setImageResource(R.drawable.my_logo);
 
         callbackManager = CallbackManager.Factory.create();
 
+        //Facebook button. For now, we only need the user email
         loginButton = (LoginButton) findViewById((R.id.login_button));
         loginButton.setReadPermissions("email");
+
+        //Login with google/Kerberos
         btnBULogin = (Button) findViewById(R.id.btnLogin);
 
         tvError = (TextView) findViewById(R.id.tvError);
+
+        //Like FB, set up permissions. Only  need email
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -104,11 +120,11 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        //get DB handle to user table
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbRef = firebaseDatabase.getReference("users");
 
-
-
+        //Sign in using google
         btnBULogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,11 +133,12 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
             }
         });
 
+        //Sign in using Facebook
         loginButton.registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        //check if user has connected with Facebook (i.e. has a uid in the db)
+                        //check if user has connected with Facebook (i.e. has an FbId in the db)
                         AccessToken at = loginResult.getAccessToken();
                         String fbid = at.getUserId();
                         Query q = dbRef.orderByChild("fbId").equalTo(fbid);
@@ -130,22 +147,25 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if(!dataSnapshot.exists())
                                 {
+                                    //No matching entry. Don't log in
                                     tvError.setText(getString(R.string.noFacebook));
                                     LoginManager.getInstance().logOut();
                                 }
                                 else {
                                     Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                                     for(DataSnapshot d : children) {
-                                        //this should really only be called once
+                                        //There should only be one matching child user
                                         user = d.getValue(BuddyUser.class);
+                                        //Older users may not have firebase ids set. Set them here
                                         if(user.getFirebaseId() == null || user.getFirebaseId().equals(""))
                                         {
                                             user.setFirebaseId(d.getKey());
                                             DatabaseReference userRef = dbRef.child(d.getKey());
+                                            //save updated user to DB
                                             userRef.setValue(user, new DatabaseReference.CompletionListener() {
                                                 @Override
                                                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                                    Log.d(StaticConstants.TAG, "sup");
+                                                    Log.e(StaticConstants.TAG, "Error writing to DB" + databaseError.getMessage());
                                                 }
                                             });
 
@@ -153,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                                     }
                                     Intent home = new Intent(getBaseContext(), HomeActivity.class);
                                     Bundle b = new Bundle();
+                                    //pass the user to the activity
                                     b.putParcelable(StaticConstants.USER_KEY,user);
 
                                     home.putExtras(b);
@@ -165,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
                                 tvError.setText(getString(R.string.unknownSignInError) + databaseError.getMessage());
                             }
-                        });
+                        }); //end update user
                     }
 
                     @Override
@@ -177,9 +198,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                     public void onError(FacebookException exception) {
                         tvError.setText(getString(R.string.unknownSignInError) + exception.getMessage());
                     }
-                });
-
-
+                }); //end register callback
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -190,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
-        else
+        else //check to see if result is from Facebook, if so, use facebook login
         {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -198,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d("BUDDY", "handleSignInResult:" + result.isSuccess());
         if(!result.isSuccess())
         {
             tvError.setText(getString(R.string.unknownSignInError));
@@ -207,10 +225,11 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             email = acct.getEmail();
-            //Log.d("BUDDY", acct.getEmail());
             if (!email.endsWith("@bu.edu")) {
+                //Not a BU email --> didn't go through Kerberos
                 tvError.setText(getString(R.string.errorNotBU));
                 if (mGoogleApiClient.isConnected()) {
+                    //if user connected to google with a non-BU address, sign them out again
                     Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                             new ResultCallback<Status>() {
                                 @Override
@@ -221,12 +240,15 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 }
                 return;
             }
+
+            //Query DB to see if returning or new user
             Query q = dbRef.orderByChild("email").equalTo(email);
             q.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.exists())
                     {
+                        //new user
                         user = new BuddyUser();
                         user.setEmail(email);
                         DatabaseReference eventRef = dbRef.push();
@@ -235,22 +257,24 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                         eventRef.setValue(user);
                         Intent home = new Intent(getApplicationContext(), HomeActivity.class);
                         home.putExtra(StaticConstants.USER_KEY,user);
-                        home.putExtra("something","else");
+                        //go to home page
                         startActivity(home);
                     }
                     else
                     {
                         Iterable<DataSnapshot> childSnap = dataSnapshot.getChildren();
-                        for(DataSnapshot d: childSnap) { //there should only be one...
+                        for(DataSnapshot d: childSnap) {
+                            //there should only be one data item that matches, so this loop should
+                            //only go through once
                             user = d.getValue(BuddyUser.class);
                             if(user.getFirebaseId() == null || user.getFirebaseId().equals(""))
                             {
+                                //set firebase id if not already set
                                 user.setFirebaseId(d.getKey());
                                 DatabaseReference userRef = dbRef.child(d.getKey());
                                 userRef.setValue(user, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                        Log.d(StaticConstants.TAG, "sup");
                                     }
                                 });
 
@@ -259,16 +283,10 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                         }
                         Intent home = new Intent(getApplicationContext(), HomeActivity.class);
                         home.putExtra(StaticConstants.USER_KEY,user);
-                        home.putExtra("something","else");
 
-
+                        //go to home page
                         startActivity(home);
-
                     }
-
-
-
-
                 }
 
                 @Override
@@ -285,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         tvError.setText(getString(R.string.unknownSignInError));
     }
 
+    //If we get stopped in the middle, save current state of email and user
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
