@@ -91,7 +91,9 @@ public abstract class InnerActivity extends AppCompatActivity {
         }
         if(id == R.id.topLikes){
             //menu option: stats page
-            return false;
+            Intent likes = new Intent(getApplicationContext(), EventLikes.class);
+            likes.putExtra(StaticConstants.USER_KEY, user);
+            startActivity(likes);
         }
         return false;
     }
