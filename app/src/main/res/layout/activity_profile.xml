@@ -58,6 +58,7 @@
                         android:layout_width="144dp"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
+                        android:textColor= "@color/cardview_light_background"
                         android:ems="10"
                         android:id="@+id/etName" />
                 </LinearLayout>
@@ -78,6 +79,7 @@
 
                     <EditText
                         android:layout_width="141dp"
+                        android:textColor= "@color/cardview_light_background"
                         android:layout_height="wrap_content"
                         android:inputType="phone"
                         android:ems="10"
@@ -100,6 +102,7 @@
 
                     <EditText
                         android:layout_width="140dp"
+                        android:textColor= "@color/cardview_light_background"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:ems="10"
@@ -122,6 +125,7 @@
 
                     <EditText
                         android:layout_width="144dp"
+                        android:textColor= "@color/cardview_light_background"
                         android:layout_height="wrap_content"
                         android:inputType="date"
                         android:ems="10"
@@ -139,6 +143,7 @@
 
             <TextView
                 android:text="Likes: 4"
+                android:textColor= "@color/cardview_light_background"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvLikes"
