@@ -10,7 +10,7 @@
     android:paddingLeft="17dp"
     android:paddingBottom="5dp"
     android:orientation="vertical"
-    android:background="@drawable/gray_background"
+    android:background="@drawable/pink_background"
     tools:context="com.example.link.android.MainActivity">
 
     <LinearLayout
