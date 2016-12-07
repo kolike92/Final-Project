@@ -34,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Profile extends InnerActivity {
 
@@ -158,10 +159,8 @@ public class Profile extends InnerActivity {
 
                     if (child.child("participants").exists()) {
                         String p = child.child("participants").getValue().toString();
-                        Log.d("participants",p);
                         p = p.substring(1,(p.length()-1));
-                        String[] participants_list = p.split(",");
-                        Log.d("participants 0", participants_list[0]);
+                        String[] participants_list = p.split(", ");
                         try {
                             if (Arrays.asList(participants_list).contains(user.getFirebaseId())) {          // if the user's fireabase ID is in the participants_list
                                 BUEvent eAdd = child.getValue(BUEvent.class);

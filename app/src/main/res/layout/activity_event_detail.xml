@@ -127,6 +127,7 @@
         android:layout_weight="1">
 
         <TextView
+<<<<<<< HEAD
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="@string/detail"
@@ -134,6 +135,12 @@
             android:layout_weight="1"
             android:gravity="center|left"
             android:textColor="@android:color/black"
+=======
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:text="@string/detail"
+            android:id="@+id/tvDetails"
+>>>>>>> e5f04ef72721cefc5a74ab660713faca10512527
             android:textSize="20sp" />
 
         <EditText
