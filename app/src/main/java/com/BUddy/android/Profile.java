@@ -1,3 +1,9 @@
+/**
+ * Class: Profile
+ * @author NOGE
+ * Superclass: InnerActivity
+ */
+
 package com.BUddy.android;
 
 import android.content.Intent;
@@ -29,12 +35,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-/**
- * Created by Sophia_ on 10/31/16.
- */
-
 public class Profile extends InnerActivity {
 
+    //UI elements
     private TextView tvNameShow;
     private EditText etName;
     private TextView tvPhoneNumShow;
@@ -55,6 +58,7 @@ public class Profile extends InnerActivity {
     private ListAdapter pstActAdapter;
     private ListAdapter yourActAdapter;
 
+    //Events: upcoming, past, user-created
     private ArrayList<BUEvent> upEvents;
     private ArrayList<BUEvent> pstEvents;
     private ArrayList<BUEvent> yourEvents;
@@ -97,14 +101,14 @@ public class Profile extends InnerActivity {
         lvPstAct = (ListView) findViewById(R.id.lvPstAct);
         tvYourAct = (TextView) findViewById(R.id.tvYourAct);
         lvYourAct = (ListView) findViewById(R.id.lvYourAct);
+
         btnSave = (Button) findViewById(R.id.btnSave);
 
         upEvents = new ArrayList<BUEvent>();
         yourEvents = new ArrayList<BUEvent>();
         pstEvents = new ArrayList<BUEvent>();
 
-
-
+        //get user from bundle
         user = getIntent().getExtras().getParcelable(StaticConstants.USER_KEY);
 
         /* fill in user information */
@@ -188,11 +192,12 @@ public class Profile extends InnerActivity {
          *
          * List View Adapter
          *
-         *
+         *For all adapters, on event click, go to the EventDetail page, passing
+         * the user and the event
          */
         /* Up Coming Events*/
         try {
-            upActAdapter = new EventListAdapter(this.getBaseContext(), upEvents, FirebaseDatabase.getInstance());
+            upActAdapter = new EventListAdapter(this.getBaseContext(), upEvents, FirebaseDatabase.getInstance(), user);
             lvUpAct.setAdapter(upActAdapter);
             lvUpAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -212,7 +217,7 @@ public class Profile extends InnerActivity {
         Past Events
         */
         try {
-            pstActAdapter = new EventListAdapter(getBaseContext(), pstEvents, FirebaseDatabase.getInstance());
+            pstActAdapter = new EventListAdapter(getBaseContext(), pstEvents, FirebaseDatabase.getInstance(),user);
             lvPstAct.setAdapter(pstActAdapter);
 
             lvPstAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -233,7 +238,7 @@ public class Profile extends InnerActivity {
          * owned Events
          */
         try {
-            yourActAdapter = new EventListAdapter(getBaseContext(), yourEvents, FirebaseDatabase.getInstance());
+            yourActAdapter = new EventListAdapter(getBaseContext(), yourEvents, FirebaseDatabase.getInstance(),user);
             lvYourAct.setAdapter(yourActAdapter);
 
 

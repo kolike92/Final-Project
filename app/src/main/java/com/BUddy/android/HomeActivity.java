@@ -1,3 +1,10 @@
+/**
+ * Class HomeActivity
+ * @author NOGE
+ * Superclass: InnerActivity
+ * Display the list of upcoming activities. Allow search and filtering.
+ */
+
 package com.BUddy.android;
 
 import android.app.FragmentManager;
@@ -41,10 +48,6 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 
-/**
- * Created by Sophia_ on 10/31/16.
- */
-
 public class HomeActivity extends InnerActivity implements SearchFragment.DialogListener {
     private ImageButton ibtnProfile;
     private ListView lvActivities;
@@ -58,10 +61,11 @@ public class HomeActivity extends InnerActivity implements SearchFragment.Dialog
 
     private ArrayList<BUEvent> events, filteredEvents;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference dbRef;
 
     private FragmentManager fragMan;
 
+    //if we had previously filtered, restore filter results (instead of reloading everything)
+    //otherwise reload events
     @Override
 protected void onRestoreInstanceState(Bundle savedInstanceState)
 {
@@ -70,33 +74,26 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
     isFiltered = savedInstanceState.getBoolean(StaticConstants.FILTERED_KEY);
 
     if(!isFiltered) {
-        long now = System.currentTimeMillis();
         showAllEvents();
     }
     else
     {
+        //get saved event list
         filteredEvents = savedInstanceState.getParcelableArrayList(StaticConstants.FILTERED_EVENTS_KEY);
-        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase,user);
         lvActivities.setAdapter(lvAdapater);
     }
 }
 
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(StaticConstants.TAG, "onCreate called in HomeActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         isFiltered = false;
         if(savedInstanceState != null)
         {
+            //if event was filtered and destroyed, show filtered events
             isFiltered = savedInstanceState.getBoolean(StaticConstants.FILTERED_KEY);
             filteredEvents = savedInstanceState.getParcelableArrayList(StaticConstants.FILTERED_EVENTS_KEY);
         }
@@ -104,6 +101,8 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
         fragMan = getFragmentManager();
 
         events = new ArrayList<BUEvent>();
+
+        //set up UI
         ibtnProfile = (ImageButton) findViewById(R.id.ibtnProfile);
         lvActivities = (ListView) findViewById(R.id.lvActivities);
         btnFilter = (Button) findViewById(R.id.btnFilter);
@@ -111,6 +110,8 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
         btnRefreshResults = (Button) findViewById(R.id.btnRefresh);
         Bundle b = getIntent().getExtras();
         btnClearFilters = (Button) findViewById(R.id.btnClearFilters);
+
+        //get user from bundle
         user = getIntent().getExtras().getParcelable(StaticConstants.USER_KEY);
 
         Firebase.setAndroidContext(this);
@@ -118,13 +119,15 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
+        //if event is filter, show from filteredEvents list instead of full events list
         if(!isFiltered) showAllEvents();
         else
         {
-            lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+            lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase,user);
             lvActivities.setAdapter(lvAdapater);
         }
 
+        //clear search results, show all upcoming events
         btnClearFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +136,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
             }
         });
 
-
+        //pop out search fragment
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,12 +146,14 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
             }
         });
 
+        //on activity click, go to the EventDetail page
         lvActivities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BUEvent e = events.get(position);
                 String eventId = e.getFirebaseId();
                 Intent intent = new Intent(getBaseContext(), EventDetail.class);
+                //pass eid and event for safety, always pass user
                 intent.putExtra(StaticConstants.EID_KEY, eventId);
                 intent.putExtra(StaticConstants.EVENT_KEY, e);
                 intent.putExtra(StaticConstants.USER_KEY,user);
@@ -156,23 +161,26 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
             }
         });
 
+        //on click, go to CreateEventActivity
         btnCreatePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent createEvent = new Intent(getBaseContext(), CreateEventActivity.class);
                 Bundle b = new Bundle();
+                //always pass the user
                 b.putParcelable(StaticConstants.USER_KEY,user);
-
                 createEvent.putExtras(b);
                 startActivity(createEvent);
             }
         });
 
+        //on click, go to user Profile
         ibtnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent profile = new Intent(getBaseContext(), Profile.class);
                 Bundle b = new Bundle();
+                //always pass the user
                 b.putParcelable(StaticConstants.USER_KEY,user);
 
                 profile.putExtras(b);
@@ -180,6 +188,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
             }
         });
 
+        //on click, search for new events and display
         btnRefreshResults.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +199,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
 
     }
 
+    //if event is stopped, save filtered state
     @Override
     public void onSaveInstanceState(Bundle saveInstanceState)
     {
@@ -199,24 +209,34 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
     }
 
 
+    //display results of filter fragment
     @Override
     public void onFinishEditDialog(ArrayList<BUEvent> eventList, boolean cancel) {
         if(cancel) return; //do nothing
+
+        //store events in filteredEvents
         filteredEvents = eventList;
-        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase);
+
+        //have adapter look at filteredEvents instead of events
+        lvAdapater = new EventListAdapter(getBaseContext(), filteredEvents, firebaseDatabase, user);
         lvActivities.setAdapter(lvAdapater);
         isFiltered = true;
+
+        //no events found
         if(filteredEvents.size() == 0) Toast.makeText(getBaseContext(),
-                "No results found", Toast.LENGTH_LONG).show();
+                getString(R.string.no_results_found), Toast.LENGTH_LONG).show();
 
 
     }
 
+    //show all upcoming events in DB (no filters)
     private void showAllEvents()
     {
+        //empty events list
         events.clear();
         long now = System.currentTimeMillis();
-        dbRef = firebaseDatabase.getReference("events");
+
+        //get all events after now, sorted by date (increasing)
         Query q = firebaseDatabase.getReference("events").orderByChild("eventDate/time").startAt(now);
         q.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
             @Override
@@ -226,6 +246,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
                     Iterable<com.google.firebase.database.DataSnapshot> children = dataSnapshot.getChildren();
                     for(com.google.firebase.database.DataSnapshot d: children)
                     {
+                        //Each child is an event in the DB
                         BUEvent eAdd = d.getValue(BUEvent.class);
                         if(eAdd.getFirebaseId() == null)
                         {
@@ -236,7 +257,8 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
                         events.add(eAdd);
                     }
 
-                    lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase);
+                    //after all events added, point the adapter to the events list
+                    lvAdapater = new EventListAdapter(getBaseContext(), events, firebaseDatabase, user);
                     lvActivities.setAdapter(lvAdapater);
                 }
             }
@@ -250,90 +272,5 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
 
 }
 
-class EventListAdapter extends BaseAdapter {
-    private ArrayList<BUEvent> buEvents;
-    private FirebaseDatabase firebaseDatabase;
-
-   // private TextView tvCreatedBy; //this is passed around
 
 
-
-
-    Context context;
-
-    public EventListAdapter(Context aContext, ArrayList<BUEvent> buEvents, FirebaseDatabase firebaseDatabase) {
-        context = aContext;
-        this.buEvents = buEvents;
-        this.firebaseDatabase = firebaseDatabase;
-
-    }
-
-    @Override
-    public int getCount() {
-        return buEvents.size();
-    }
-    @Override
-    public long getItemId(int position){
-        return position;
-    }
-
-
-     @Override
-    public Object getItem(int position) {
-        return buEvents.get(position);
-    }
-
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row;
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = (View) inflater.inflate(R.layout.listview_row, parent, false);
-        }
-        else {
-            row = convertView;
-        }
-
-        TextView tvEventTitle = (TextView) row.findViewById(R.id.tvEventTitle);
-        TextView tvEventDescription = (TextView) row.findViewById(R.id.tvEventDescription);
-        TextView tvCreateTime = (TextView) row.findViewById(R.id.tvCreateTime);
-        final TextView tvCreatedBy = (TextView) row.findViewById(R.id.tvEventOwner);
-
-        try{
-            BUEvent thisEvent = buEvents.get(position);
-            tvEventTitle.setText(thisEvent.getEventTitle());
-            tvEventDescription.setText(thisEvent.getEventDetails());
-
-            DatabaseReference dbCreator = firebaseDatabase.getReference("users/" + thisEvent.getCreator());
-            dbCreator.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
-                @Override
-                public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists())
-                    {
-                        BuddyUser creator = dataSnapshot.getValue(BuddyUser.class);
-                        if(creator != null) tvCreatedBy.setText(creator.getEmail());
-
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            tvCreateTime.setText(StaticConstants.SDF.format(thisEvent.getEventDate()));
-        }
-        catch (Exception e){}
-
-
-
-
-        return row;
-
-
-    }
-
-
-
-}

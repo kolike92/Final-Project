@@ -1,3 +1,12 @@
+/**
+ * Class: InnerActivity
+ * @author NOGE
+ * Superclass: AppCompatActivity
+ *
+ * Base class for all activites except login to display menu on every page
+ */
+
+
 package com.BUddy.android;
 
 import android.content.Intent;
@@ -21,16 +30,22 @@ import java.util.Arrays;
 public abstract class InnerActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
+
+    //all activites must have a user object
     BuddyUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set up facebook SDK and callback manager
         callbackManager = CallbackManager.Factory.create();
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        //when manager is called, log user in on FB
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
+                        //successful login, get FB id and add to DB
                         AccessToken at = loginResult.getAccessToken();
                         String fbid = at.getUserId();
                         if(user != null) user.setFbId(fbid);
@@ -65,15 +80,17 @@ public abstract class InnerActivity extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.facebookConnect)
         {
+            //menu option: facebook connect (call login manager)
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
         }
         if(id == R.id.homeButton) {
-            //if (getApplicationContext())
+            //menu option: home
             Intent home = new Intent(getApplicationContext(), HomeActivity.class);
             home.putExtra(StaticConstants.USER_KEY, user);
             startActivity(home);
         }
         if(id == R.id.topLikes){
+            //menu option: stats page
             return false;
         }
         return false;
@@ -82,6 +99,7 @@ public abstract class InnerActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        //forward on activity result to FB callback manager in case it was an FB login
         super.onActivityResult(requestCode,resultCode,data);
         callbackManager.onActivityResult(requestCode,resultCode,data);
     }
