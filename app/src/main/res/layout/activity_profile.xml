@@ -158,7 +158,6 @@
             android:layout_weight="4">
 
             <TextView
-                android:text="Likes: 4"
                 android:textColor="@android:color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"

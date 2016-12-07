@@ -144,7 +144,6 @@
             android:layout_weight="5">
 
             <TextView
-                android:text="Likes: 4"
                 android:textColor= "@color/cardview_light_background"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

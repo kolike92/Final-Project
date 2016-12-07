@@ -68,6 +68,7 @@
     <string name="event_passed">This event has passed</string>
 
     <string name="no_results_found">No results found</string>
+    <string name="set_likes">Likes: %1$d</string>
 
 
 </resources>

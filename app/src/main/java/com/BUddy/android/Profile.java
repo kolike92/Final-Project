@@ -127,6 +127,11 @@ public class Profile extends InnerActivity {
             etDoB.setText(user.getDob());
         } catch (Exception e) {}
 
+        if(user != null && user.getLikes() != null)
+        {
+            tvLikes.setText(String.format(getString(R.string.set_likes),user.getLikes().size()));
+        }
+
 
 
 
