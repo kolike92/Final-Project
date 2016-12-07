@@ -450,7 +450,7 @@ public class EventDetail extends InnerActivity{
             }
             else {
                 btnJoin.setText(getString(R.string.event_passed));
-                btnJoin.setClickable(false);
+                btnJoin.setEnabled(false);
             }
         }
 
