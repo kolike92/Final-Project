@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="6">
-
+    android:weightSum="7">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -24,8 +23,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/tvTitleSet" />
+            android:id="@+id/tvTitleSet"
+            android:background="@android:color/transparent" />
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/numberpeople"
+            android:id="@+id/tvnumpeople"
+            android:textSize="20sp" />
+
+        <EditText
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/tvnumpeopleset"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -46,8 +71,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/tvDateSet"/>
+            android:id="@+id/tvDateSet"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -68,9 +95,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvLocationSet"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@android:color/transparent"/>
 
     </LinearLayout>
+
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -79,18 +109,20 @@
         android:layout_weight="1">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="@string/detail"
             android:id="@+id/tvDetails"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:layout_weight="1" />
 
         <EditText
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/tvDetailsSet"/>
+            android:id="@+id/tvDetailsSet"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 
     <LinearLayout
@@ -100,10 +132,11 @@
         android:layout_weight="1">
 
         <TextView
-            android:layout_width="250dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/category"
             android:id="@+id/tvCategories"
+            android:layout_weight="1"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -114,9 +147,10 @@
         android:layout_weight="1">
 
         <TextView
-            android:layout_width="206dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/createby"
+            android:layout_weight="1"
             android:id="@+id/tvCreatedBy"
             android:textSize="20sp" />
     </LinearLayout>
@@ -125,24 +159,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/message"
-        android:id="@+id/button"
+        android:id="@+id/btnMessage"
         android:layout_weight="1"
         android:layout_gravity="center_horizontal" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Where?"
+        android:text="@string/where"
         android:id="@+id/btnMap"
         android:layout_weight="1"
         android:layout_gravity="center_horizontal" />
- 
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/join"
-        android:id="@+id/button2"
+        android:id="@+id/btnJoin"
         android:layout_weight="1"
         android:layout_gravity="center_horizontal" />
-
 </LinearLayout>
