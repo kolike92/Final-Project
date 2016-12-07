@@ -15,14 +15,16 @@
             android:layout_width="177dp"
             android:layout_height="wrap_content"
             android:id="@+id/tvEventTitle"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor= "@color/cardview_light_background"/>
 
         <TextView
             android:text="11/02/2016"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvCreateTime"
-            android:layout_weight="0.46" />
+            android:layout_weight="0.46"
+            android:textColor= "@color/cardview_light_background"/>
     </LinearLayout>
 
     <LinearLayout
@@ -35,14 +37,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvPostBy"
             android:text="@string/postBy"
-            android:layout_weight="0.07" />
+            android:layout_weight="0.07"
+            android:textColor= "@color/cardview_light_background"/>
 
         <TextView
             android:text="OwnerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvEventOwner"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textColor= "@color/cardview_light_background"/>
 
         <TextView
             android:text="@string/liked_this"
@@ -50,7 +54,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvLiked"
             android:layout_weight="0.07"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:textColor= "@color/cardview_light_background"/>
     </LinearLayout>
 
     <TextView
@@ -58,6 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvEventDescription"
-        android:layout_weight="0.06" />
+        android:layout_weight="0.06"
+        android:textColor= "@color/cardview_light_background"/>
 
 </LinearLayout>
