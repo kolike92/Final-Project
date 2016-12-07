@@ -339,7 +339,9 @@ public class EventDetail extends InnerActivity{
                     //event found, update UI with event information
                     event = dataSnapshot.getValue(BUEvent.class);
                     tvTitleSet.setText(event.getEventTitle());
-                    tvDateSet.setText(StaticConstants.SDF.format(event.getEventDate()));
+                    if(event.getEventDate() != null) {
+                        tvDateSet.setText(StaticConstants.SDF.format(event.getEventDate()));
+                    } else tvDateSet.setText("");
                     Calendar c = Calendar.getInstance();
                     Date now = c.getTime();
 
@@ -347,6 +349,7 @@ public class EventDetail extends InnerActivity{
                     String s = String.valueOf(event.getMaxParticipants());
                     String s2 = String.valueOf(event.getParticipants().size());
                     tvnumpeopleSet.setText(s2+"/"+s);
+                    tvnumpeopleSet.setEnabled(false);
                     tvCategories.setText(EventCategory.getById(event.getCategory()).getName(getApplicationContext()));
                     tvDetailsSet.setText(event.getEventDetails());
 
@@ -441,8 +444,8 @@ public class EventDetail extends InnerActivity{
         else
         {
             if(joined) {
-                if (liked) btnJoin.setText(getString(R.string.like_event));
-                else btnJoin.setText(R.string.unlike_event);
+                if (liked) btnJoin.setText(getString(R.string.unlike_event));
+                else btnJoin.setText(R.string.like_event);
                 btnJoin.setClickable(true);
             }
             else {

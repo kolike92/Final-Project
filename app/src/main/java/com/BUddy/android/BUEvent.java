@@ -10,6 +10,7 @@ package com.BUddy.android;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -48,8 +49,14 @@ public class BUEvent implements Parcelable{
         creator = in.readString();
         firebaseId = in.readString();
         try
-        {eventDate = StaticConstants.SDF.parse(in.readString());}
+        {
+            String d = in.readString();
+            if(d!=null) eventDate = StaticConstants.SDF.parse(d);
+            else Log.e(StaticConstants.TAG, "Null event date for event " + firebaseId);
+        }
+
         catch (ParseException pe){ eventDate = null;}
+
     }
 
 
