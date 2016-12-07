@@ -145,7 +145,10 @@ public class Profile extends InnerActivity {
                          * add event to owned event list
                          */
                     if (child.child("creator").getValue().toString().equals(user.getFirebaseId())) {            // if event creator's ID is the user's  firebase ID
+
                         BUEvent eAdd = child.getValue(BUEvent.class);
+                        //in case Id has been dropped
+                        if(eAdd.getFirebaseId() == null) eAdd.setFirebaseId(child.getKey());
                         yourEvents.add(eAdd);
                     }
 
@@ -162,6 +165,7 @@ public class Profile extends InnerActivity {
                         try {
                             if (Arrays.asList(participants_list).contains(user.getFirebaseId())) {          // if the user's fireabase ID is in the participants_list
                                 BUEvent eAdd = child.getValue(BUEvent.class);
+                                if(eAdd.getFirebaseId() == null) eAdd.setFirebaseId(child.getKey());
                                 Date currentDate = new Date();                                              // current time
                                 if (eAdd.getEventDate().before(currentDate))                                // if the event happened before current time
                                     pstEvents.add(eAdd);                                                    // add event to the past event list
