@@ -10,11 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-<<<<<<< HEAD
-    android:background="@drawable/gray_background"
-=======
     android:background="@drawable/black_background"
->>>>>>> e5f04ef72721cefc5a74ab660713faca10512527
     tools:context="com.example.link.android.MainActivity">
 
     <LinearLayout
@@ -58,7 +54,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:id="@+id/tvNameShow"
-                        android:textColor="@android:color/black"
                         android:layout_weight="1" />
 
                     <EditText
@@ -67,7 +62,6 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
                         android:ems="10"
-                        android:textColor="@android:color/black"
                         android:id="@+id/etName" />
                 </LinearLayout>
 
@@ -83,7 +77,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:id="@+id/tvPhoneNumShow"
-                        android:textColor="@android:color/black"
                         android:layout_weight="1" />
 
                     <EditText
@@ -92,7 +85,6 @@
                         android:layout_height="wrap_content"
                         android:inputType="phone"
                         android:ems="10"
-                        android:textColor="@android:color/black"
                         android:id="@+id/etPhoneNum" />
                 </LinearLayout>
 
@@ -107,7 +99,6 @@
                         android:textColor= "@color/cardview_light_background"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textColor="@android:color/black"
                         android:id="@+id/tvEmailShow"
                         android:layout_weight="1" />
 
@@ -116,7 +107,6 @@
                         android:textColor= "@color/cardview_light_background"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
-                        android:textColor="@android:color/black"
                         android:ems="10"
                         android:id="@+id/etEmail" />
                 </LinearLayout>
@@ -132,7 +122,6 @@
                         android:textColor= "@color/cardview_light_background"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textColor="@android:color/black"
                         android:id="@+id/tvDoBShow"
                         android:layout_weight="1" />
 
@@ -140,7 +129,6 @@
                         android:layout_width="144dp"
                         android:textColor= "@color/cardview_light_background"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
                         android:inputType="date"
                         android:ems="10"
                         android:id="@+id/etDoB" />
@@ -160,7 +148,6 @@
                 android:textColor= "@color/cardview_light_background"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
                 android:id="@+id/tvLikes"
                 android:layout_weight="1" />
         </LinearLayout>
@@ -184,7 +171,6 @@
             android:id="@+id/tvUpAct"
             android:layout_weight="0.02"
             android:textStyle="normal|bold"
-            android:textColor="@android:color/black"
             android:textSize="18sp" />
 
         <ListView
@@ -201,7 +187,6 @@
             android:id="@+id/tvPstAct"
             android:layout_weight="0.02"
             android:textStyle="normal|bold"
-            android:textColor="@android:color/black"
             android:textSize="18sp" />
 
         <ListView
@@ -233,12 +218,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvYourAct"
-<<<<<<< HEAD
-            android:layout_weight="0.01"
-            android:textColor="@android:color/black"
-=======
             android:layout_weight="0.02"
->>>>>>> e5f04ef72721cefc5a74ab660713faca10512527
             android:textStyle="normal|bold"
             android:textSize="18sp"
             android:layout_alignParentTop="true"
@@ -259,20 +239,6 @@
             android:layout_alignParentStart="true" />
 
 
-<<<<<<< HEAD
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:id="@+id/tvSpace"
-                android:layout_weight="1" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
-=======
     </RelativeLayout>
->>>>>>> e5f04ef72721cefc5a74ab660713faca10512527
 
 </RelativeLayout>
