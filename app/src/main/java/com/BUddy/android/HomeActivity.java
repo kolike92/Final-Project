@@ -232,7 +232,7 @@ protected void onRestoreInstanceState(Bundle savedInstanceState)
                             //old events may not have firebase Ids, add them now
                             eAdd.setFirebaseId(d.getKey());
 
-                        }
+                        } 
                         events.add(eAdd);
                     }
 
