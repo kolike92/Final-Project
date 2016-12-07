@@ -11,7 +11,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="75dp">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
@@ -19,16 +20,17 @@
             android:text="@string/search"
             android:id="@+id/tvSearch"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center_vertical|center|center_horizontal"
+            android:textStyle="bold" />
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Search terms"
             android:ems="10"
             android:id="@+id/etSearch"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="fill_horizontal|center_vertical|center" />
 
     </LinearLayout>
 
@@ -36,62 +38,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:rowCount="4"
+        android:rowCount="2"
         android:columnCount="3">
 
         <CheckBox
-            android:text="Food"
-            android:layout_width="105dp"
-            android:layout_height="50dp"
-            android:id="@+id/checkFood"
-            android:checked="false"
-            android:layout_row="0"
-            android:layout_column="0" />
+            android:text="@string/food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkFood"/>
 
         <CheckBox
-            android:text="Sports"
-            android:layout_width="105dp"
-            android:layout_height="50dp"
-            android:id="@+id/checkSports"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:checked="false" />
+            android:text="@string/sports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkSports" />
 
         <CheckBox
-            android:text="Movie"
-            android:layout_width="105dp"
-            android:layout_height="50dp"
-            android:id="@+id/checkMovie"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:checked="false" />
+            android:text="@string/study"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkStudyBreak" />
 
         <CheckBox
-            android:text="Exploring"
-            android:layout_width="105dp"
-            android:layout_height="50dp"
-            android:id="@+id/checkExploring"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:checked="false" />
+            android:text="@string/movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkMovie" />
 
         <CheckBox
-            android:text="Other"
-            android:layout_width="105dp"
-            android:layout_height="50dp"
-            android:id="@+id/checkOther"
-            android:layout_row="2"
-            android:layout_column="0" />
+            android:text="@string/explore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkExploring" />
 
         <CheckBox
-            android:text="Study Break"
-            android:layout_width="105dp"
-            android:layout_height="50dp"
-            android:id="@+id/checkStudyBreak"
-            android:layout_row="2"
-            android:layout_column="1"
-            android:checked="false" />
-
+            android:text="@string/other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkOther" />
     </GridLayout>
 
     <LinearLayout
@@ -106,6 +90,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/btnSearch"/>
+
+        <Button
+            android:text="@string/cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCancel"
+            android:layout_weight="1" />
     </LinearLayout>
 
 </LinearLayout>
