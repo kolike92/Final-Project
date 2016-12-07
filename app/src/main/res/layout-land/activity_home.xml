@@ -16,7 +16,7 @@
             android:layout_height="100dp"
             android:id="@+id/ibtnProfile"
             android:scaleType="fitXY"
-            android:src="@drawable/abc_ic_star_black_16dp"
+            android:src="@drawable/ic_person_black_24dp"
             android:layout_row="0"
             android:layout_column="0" />
 
