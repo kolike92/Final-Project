@@ -2,13 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/black_background">
+    android:background="@drawable/gray_background"
+    android:paddingRight="17dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="17dp">
 
     <TextView
         android:text='Most "Likes" Events:'
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvEventLikes"
+        android:textColor="@android:color/black"
         android:textSize="20sp" />
 
     <ListView

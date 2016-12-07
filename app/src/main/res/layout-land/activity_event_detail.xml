@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/black_background"
     android:weightSum="7">
     <LinearLayout
         android:orientation="horizontal"
@@ -16,6 +17,7 @@
             android:layout_weight="1"
             android:text="@string/title"
             android:id="@+id/tvTitle"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
         <EditText
@@ -24,6 +26,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/tvTitleSet"
+            android:textColor="@android:color/black"
             android:background="@android:color/transparent" />
     </LinearLayout>
 
@@ -40,6 +43,7 @@
             android:layout_weight="1"
             android:text="@string/numberpeople"
             android:id="@+id/tvnumpeople"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
         <EditText
@@ -48,6 +52,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/tvnumpeopleset"
+            android:textColor="@android:color/black"
             android:background="@android:color/transparent"/>
     </LinearLayout>
 
@@ -64,6 +69,7 @@
             android:text="@string/date"
             android:id="@+id/tvDate"
             android:layout_weight="1"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
         <EditText
@@ -72,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/tvDateSet"
+            android:textColor="@android:color/black"
             android:background="@android:color/transparent"/>
     </LinearLayout>
 
@@ -88,6 +95,7 @@
             android:text="@string/location"
             android:id="@+id/tvLocation"
             android:layout_weight="1"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
         <EditText
@@ -96,6 +104,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvLocationSet"
             android:layout_weight="1"
+            android:textColor="@android:color/black"
             android:background="@android:color/transparent"/>
 
     </LinearLayout>
@@ -114,6 +123,7 @@
             android:text="@string/detail"
             android:id="@+id/tvDetails"
             android:textSize="20sp"
+            android:textColor="@android:color/black"
             android:layout_weight="1" />
 
         <EditText
@@ -121,6 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@android:color/black"
             android:id="@+id/tvDetailsSet"
             android:background="@android:color/transparent"/>
     </LinearLayout>
@@ -137,6 +148,7 @@
             android:text="@string/category"
             android:id="@+id/tvCategories"
             android:layout_weight="1"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -152,6 +164,7 @@
             android:text="@string/createby"
             android:layout_weight="1"
             android:id="@+id/tvCreatedBy"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
     </LinearLayout>
 

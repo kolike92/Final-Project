@@ -5,18 +5,20 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="17dp"
+    android:paddingTop="5dp"
+    android:paddingLeft="17dp"
+    android:paddingBottom="5dp"
     android:orientation="vertical"
-    android:background="@drawable/black_background"
+    android:background="@drawable/gray_background"
     tools:context="com.example.link.android.MainActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_weight="1">
 
         <LinearLayout
@@ -28,17 +30,19 @@
             <ImageView
                 android:layout_width="156dp"
                 android:layout_height="match_parent"
-                app:srcCompat="@mipmap/ic_launcher"
                 android:layout_below="@+id/tvDate"
                 android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_person_black_24dp"
                 android:layout_marginTop="0dp"
                 android:id="@+id/imageView"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:layout_weight="0.25" />
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -50,17 +54,20 @@
                         android:text="Name: "
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:gravity="bottom"
                         android:id="@+id/tvNameShow"
-                        android:textColor= "@color/cardview_light_background"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
                         android:layout_weight="1" />
 
                     <EditText
                         android:layout_width="144dp"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:textColor= "@color/cardview_light_background"
+                        android:textColor="@android:color/black"
                         android:ems="10"
-                        android:id="@+id/etName" />
+                        android:id="@+id/etName"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -73,17 +80,20 @@
                         android:text="Phone: "
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:gravity="bottom"
                         android:id="@+id/tvPhoneNumShow"
-                        android:textColor= "@color/cardview_light_background"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/black"
                         android:layout_weight="1" />
 
                     <EditText
                         android:layout_width="141dp"
-                        android:textColor= "@color/cardview_light_background"
+                        android:textColor="@android:color/black"
                         android:layout_height="wrap_content"
                         android:inputType="phone"
                         android:ems="10"
-                        android:id="@+id/etPhoneNum" />
+                        android:id="@+id/etPhoneNum"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -95,18 +105,21 @@
                     <TextView
                         android:text="Email: "
                         android:layout_width="wrap_content"
+                        android:gravity="bottom"
                         android:layout_height="match_parent"
                         android:id="@+id/tvEmailShow"
-                        android:textColor= "@color/cardview_light_background"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/black"
                         android:layout_weight="1" />
 
                     <EditText
                         android:layout_width="140dp"
-                        android:textColor= "@color/cardview_light_background"
+                        android:textColor="@android:color/black"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:ems="10"
-                        android:id="@+id/etEmail" />
+                        android:id="@+id/etEmail"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,16 +133,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:id="@+id/tvDoBShow"
-                        android:textColor= "@color/cardview_light_background"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/black"
+                        android:gravity="bottom"
                         android:layout_weight="1" />
 
                     <EditText
                         android:layout_width="144dp"
-                        android:textColor= "@color/cardview_light_background"
+                        android:textColor="@android:color/black"
                         android:layout_height="wrap_content"
                         android:inputType="date"
                         android:ems="10"
-                        android:id="@+id/etDoB" />
+                        android:id="@+id/etDoB"
+                        android:layout_weight="0.8" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -139,15 +155,24 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5">
+            android:layout_weight="4">
 
             <TextView
                 android:text="Likes: 4"
-                android:textColor= "@color/cardview_light_background"
+                android:textColor="@android:color/black"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:id="@+id/tvLikes"
+                android:gravity="left|center"
                 android:layout_weight="1" />
+
+            <Button
+                android:text="@string/save"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:id="@+id/btnSave"
+                android:layout_weight="0.1" />
         </LinearLayout>
 
     </LinearLayout>
@@ -160,69 +185,48 @@
 
         <TextView
             android:text="@string/upAct"
-            android:textColor= "@color/cardview_light_background"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
             android:id="@+id/tvUpAct"
-            android:layout_weight="0.02"
             android:textStyle="normal|bold"
             android:textSize="18sp" />
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="73dp"
+            android:layout_height="90dp"
             android:id="@+id/lvUpAct" />
 
         <TextView
             android:text="@string/pastAct"
-            android:textColor= "@color/cardview_light_background"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
             android:id="@+id/tvPstAct"
-            android:layout_weight="0.02"
             android:textStyle="normal|bold"
             android:textSize="18sp" />
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="90dp"
             android:id="@+id/lvPstAct" />
 
         <TextView
             android:text="@string/yourAct"
-            android:textColor= "@color/cardview_light_background"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
             android:id="@+id/tvYourAct"
-            android:layout_weight="0.01"
             android:textStyle="normal|bold"
             android:textSize="18sp" />
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="29dp"
-            android:layout_weight="0.16"
+            android:layout_height="90dp"
             android:id="@+id/lvYourAct" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="33dp">
-
-            <Button
-                android:text="@string/save"
-                android:layout_width="wrap_content"
-                android:layout_height="34dp"
-                android:id="@+id/btnSave" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvSpace"
-                android:layout_weight="1" />
-
-
-        </LinearLayout>
 
     </LinearLayout>
 
