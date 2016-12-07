@@ -4,50 +4,63 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:weightSum="1"
-        android:layout_weight="0.71">
+        android:layout_height="100dp"
+        android:weightSum="1">
 
         <ImageButton
             android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_height="100dp"
             android:id="@+id/ibtnProfile"
             android:scaleType="fitXY"
-            android:src="@drawable/abc_ic_star_black_16dp" />
+            android:src="@drawable/abc_ic_star_black_16dp"
+            android:layout_row="0"
+            android:layout_column="0" />
+
+        <Button
+            android:layout_width="112dp"
+            android:layout_height="50dp"
+            android:text="@string/filter"
+            android:id="@+id/btnFilter"
+            android:layout_row="0"
+            android:layout_column="6"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/ibtnProfile" />
 
         <Button
             android:text="@string/clear_filters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="112dp"
+            android:layout_height="50dp"
             android:id="@+id/btnClearFilters"
-            android:layout_weight="1" />
+            android:layout_row="0"
+            android:layout_column="7"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/btnFilter" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/filter"
-            android:id="@+id/btnFilter" />
-    </LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create"
+            android:id="@+id/btnCreatePost"
+            android:layout_gravity="bottom"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/btnFilter" />
+
+        <Button
+            android:text="@string/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnRefresh"
+            android:layout_below="@+id/btnCreatePost"
+            android:layout_alignStart="@+id/btnCreatePost" />
+    </RelativeLayout>
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="175dp"
+        android:layout_height="179dp"
         android:id="@+id/lvActivities"
-        android:layout_weight="0.21" />
+        android:layout_weight="0.92" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/create"
-        android:id="@+id/btnCreatePost" />
-
-    <Button
-        android:text="@string/refresh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnRefresh"
-        android:layout_weight="0.71" />
 </LinearLayout>
